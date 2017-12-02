@@ -15,3 +15,4 @@ node_modules
 
 tests/
 elm-package.json
+package-lock.json
