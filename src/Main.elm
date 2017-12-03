@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Days.Day1 as Day1
 import Days.Day2 as Day2
+import Days.Day3 as Day3
 import Html exposing (..)
 
 
@@ -43,6 +44,8 @@ view model =
         , dayResultHtml "Day 1b: " Day1.getPuzzleAnswer2
         , dayResultHtml "Day 2a: " Day2.getPuzzleAnswer
         , dayResultHtml "Day 2b: " Day2.getPuzzleAnswer2
+        , dayResultHtml "Day 3a: " Day3.getPuzzleAnswer
+        , dayResultHtml "Day 3b: " Day3.getPuzzleAnswer2
         ]
 
 
