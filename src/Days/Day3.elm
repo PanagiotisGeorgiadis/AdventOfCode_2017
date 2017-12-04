@@ -151,6 +151,57 @@ getPuzzleAnswer =
     "Commented out the result and changed the annotation because it takes time to execute..."
 
 
+
+---------------------------------------------------------------------------------------------
+
+
+type Direction
+    = North
+    | South
+    | West
+    | East
+    | NorthWest
+    | NorthEast
+    | SouthWest
+    | SouthEast
+
+
+getElementValueFromCoords : List ( Int, Int, Int ) -> Coordinates -> Int
+getElementValueFromCoords list targetCoords =
+    let
+        targetX =
+            Tuple.first targetCoords
+
+        targetY =
+            Tuple.second targetCoords
+    in
+    List.foldl
+        (\item r ->
+            case item of
+                ( a, b, c ) ->
+                    if a == targetX && b == targetY then
+                        c
+                    else
+                        r
+        )
+        0
+        list
+
+
+
+-- getElementValueFromDirection : Direction -> List (Int, Int, Int) -> Int
+-- getElementValueFromDirection direction list =
+--     case direction of
+--         North ->
+--         South ->
+--         West ->
+--         East ->
+--         NorthWest ->
+--         NorthEast ->
+--         SouthWest ->
+--         SouthEast ->
+
+
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
     "Answer2"
