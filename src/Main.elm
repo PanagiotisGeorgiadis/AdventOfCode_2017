@@ -4,6 +4,7 @@ import Days.Day1 as Day1
 import Days.Day2 as Day2
 import Days.Day3 as Day3
 import Days.Day4 as Day4
+import Days.Day5 as Day5
 import Html exposing (..)
 
 
@@ -49,14 +50,16 @@ view model =
         , dayResultHtml "Day 3b: " Day3.getPuzzleAnswer2
         , dayResultHtml "Day 4a: " Day4.getPuzzleAnswer
         , dayResultHtml "Day 4b: " Day4.getPuzzleAnswer2
+        , dayResultHtml "Day 5a: " Day5.getPuzzleAnswer
+        , dayResultHtml "Day 5b: " Day5.getPuzzleAnswer2
         ]
 
 
-dayResultHtml : String -> a -> Html Msg
+dayResultHtml : String -> String -> Html Msg
 dayResultHtml title answer =
     div []
         [ text title
-        , text <| toString answer
+        , text answer
         ]
 
 

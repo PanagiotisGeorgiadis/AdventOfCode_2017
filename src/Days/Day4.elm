@@ -530,7 +530,7 @@ isInvalidPassphrase words row =
         words
 
 
-getPuzzleAnswer : Int
+getPuzzleAnswer : String
 getPuzzleAnswer =
     let
         puzzleInputRows =
@@ -552,7 +552,7 @@ getPuzzleAnswer =
                 0
                 puzzleInputRows
     in
-    validRows
+    toString <| validRows
 
 
 isAnagram : String -> String -> Bool

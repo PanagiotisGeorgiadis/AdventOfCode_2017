@@ -59,7 +59,7 @@ inputList =
     String.toList puzzleInput
 
 
-getPuzzleAnswer : Int
+getPuzzleAnswer : String
 getPuzzleAnswer =
     let
         shiftedInputList =
@@ -79,22 +79,23 @@ getPuzzleAnswer =
                 shiftedInputList
                 inputList
     in
-    List.foldl
-        (\element r ->
-            if Tuple.first element == Tuple.second element then
-                r + Tuple.first element
-            else
-                r
-        )
-        0
-        updatedTupleList
+    toString <|
+        List.foldl
+            (\element r ->
+                if Tuple.first element == Tuple.second element then
+                    r + Tuple.first element
+                else
+                    r
+            )
+            0
+            updatedTupleList
 
 
 
 -------------------------------------
 
 
-getPuzzleAnswer2 : Int
+getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
     let
         firstHalfList =
@@ -111,12 +112,13 @@ getPuzzleAnswer2 =
                 firstHalfList
                 secondHalfList
     in
-    List.foldl
-        (\t r ->
-            if Tuple.first t == Tuple.second t then
-                r + (Tuple.first t + Tuple.second t)
-            else
-                r
-        )
-        0
-        updatedTupleList
+    toString <|
+        List.foldl
+            (\t r ->
+                if Tuple.first t == Tuple.second t then
+                    r + (Tuple.first t + Tuple.second t)
+                else
+                    r
+            )
+            0
+            updatedTupleList

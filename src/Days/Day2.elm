@@ -16,7 +16,7 @@ getRowElements row =
         (String.split ", " row)
 
 
-getPuzzleAnswer : Int
+getPuzzleAnswer : String
 getPuzzleAnswer =
     let
         spreadsheetRows =
@@ -46,10 +46,10 @@ getPuzzleAnswer =
                 0
                 minMaxList
     in
-    checkSum
+    toString <| checkSum
 
 
-getPuzzleAnswer2 : Int
+getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
     let
         spreadsheetRows =
@@ -79,9 +79,10 @@ getPuzzleAnswer2 =
                 )
                 spreadsheetRows
     in
-    List.foldl
-        (\element r ->
-            r + element
-        )
-        0
-        evenlyDivisibleElements
+    toString <|
+        List.foldl
+            (\element r ->
+                r + element
+            )
+            0
+            evenlyDivisibleElements
