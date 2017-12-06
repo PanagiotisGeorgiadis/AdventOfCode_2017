@@ -1,5 +1,8 @@
 module Days.Day3 exposing (getPuzzleAnswer, getPuzzleAnswer2)
 
+import Array exposing (Array)
+import Utils.Triplet as Triplet
+
 
 type alias Coordinates =
     ( Int, Int )
@@ -137,17 +140,23 @@ getCoordinatesFromIndex targetIndex previousIndex =
         getCoordinatesFromIndex targetIndex (previousIndex + 1)
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         nearestDivisor =
+--             roundPuzzleInputToTheNearestDivisor 0 8
+--
+--         maxCoordinatesRange =
+--             getCoordinateRangeFromIndex nearestDivisor 0 ( 0, 0 )
+--     in
+--     toString <|
+--         calculateManhatanDistance ( 0, 0 ) <|
+--             getCoordinatesFromIndex puzzleInput 0
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        nearestDivisor =
-            roundPuzzleInputToTheNearestDivisor 0 8
-
-        maxCoordinatesRange =
-            getCoordinateRangeFromIndex nearestDivisor 0 ( 0, 0 )
-    in
-    -- calculateManhatanDistance ( 0, 0 ) <|
-    -- getCoordinatesFromIndex puzzleInput 0
     "Commented out the result and changed the annotation because it takes time to execute..."
 
 
@@ -166,8 +175,8 @@ type Direction
     | SouthEast
 
 
-getElementValueFromCoords : List ( Int, Int, Int ) -> Coordinates -> Int
-getElementValueFromCoords list targetCoords =
+getElementValueFromCoords : Array ( Int, Int, Int ) -> Coordinates -> Int
+getElementValueFromCoords spiralArray targetCoords =
     let
         targetX =
             Tuple.first targetCoords
@@ -175,33 +184,123 @@ getElementValueFromCoords list targetCoords =
         targetY =
             Tuple.second targetCoords
     in
-    List.foldl
+    Array.foldl
         (\item r ->
-            case item of
-                ( a, b, c ) ->
-                    if a == targetX && b == targetY then
-                        c
-                    else
-                        r
+            if targetX == Triplet.first item && targetY == Triplet.second item then
+                Triplet.third item
+            else
+                r
         )
         0
-        list
+        spiralArray
 
 
+getElementValueFromDirection : Direction -> Coordinates -> Array ( Int, Int, Int ) -> Int
+getElementValueFromDirection direction sourceCoords spiralArray =
+    case direction of
+        North ->
+            getElementValueFromCoords spiralArray ( Tuple.first sourceCoords + 1, Tuple.second sourceCoords )
 
--- getElementValueFromDirection : Direction -> List (Int, Int, Int) -> Int
--- getElementValueFromDirection direction list =
---     case direction of
---         North ->
---         South ->
---         West ->
---         East ->
---         NorthWest ->
---         NorthEast ->
---         SouthWest ->
---         SouthEast ->
+        South ->
+            getElementValueFromCoords spiralArray ( Tuple.first sourceCoords - 1, Tuple.second sourceCoords )
+
+        West ->
+            getElementValueFromCoords spiralArray ( Tuple.first sourceCoords, Tuple.second sourceCoords - 1 )
+
+        East ->
+            getElementValueFromCoords spiralArray ( Tuple.first sourceCoords, Tuple.second sourceCoords + 1 )
+
+        NorthWest ->
+            getElementValueFromCoords spiralArray ( Tuple.first sourceCoords + 1, Tuple.second sourceCoords - 1 )
+
+        NorthEast ->
+            getElementValueFromCoords spiralArray ( Tuple.first sourceCoords + 1, Tuple.second sourceCoords + 1 )
+
+        SouthWest ->
+            getElementValueFromCoords spiralArray ( Tuple.first sourceCoords - 1, Tuple.second sourceCoords - 1 )
+
+        SouthEast ->
+            getElementValueFromCoords spiralArray ( Tuple.first sourceCoords - 1, Tuple.second sourceCoords + 1 )
+
+
+getNewElementValue : Coordinates -> Array ( Int, Int, Int ) -> Int
+getNewElementValue coords spiralArray =
+    getElementValueFromDirection North coords spiralArray
+        + getElementValueFromDirection South coords spiralArray
+        + getElementValueFromDirection West coords spiralArray
+        + getElementValueFromDirection East coords spiralArray
+        + getElementValueFromDirection NorthWest coords spiralArray
+        + getElementValueFromDirection NorthEast coords spiralArray
+        + getElementValueFromDirection SouthWest coords spiralArray
+        + getElementValueFromDirection SouthEast coords spiralArray
+
+
+createSpiralAdditionArray : Int -> Coordinates -> Array ( Int, Int, Int ) -> Array ( Int, Int, Int )
+createSpiralAdditionArray maxValue ( maxCoord, minCoord ) spiralArray =
+    let
+        lastItem =
+            Maybe.withDefault ( 0, 0, 0 ) <| Array.get (Array.length spiralArray - 1) spiralArray
+
+        xValue =
+            Triplet.first lastItem
+
+        yValue =
+            Triplet.second lastItem
+
+        newMaxCoords =
+            if xValue == maxCoord && yValue == minCoord then
+                ( maxCoord + 1, minCoord - 1 )
+            else
+                ( maxCoord, minCoord )
+
+        newItemCoords =
+            if xValue == maxCoord && yValue == maxCoord then
+                ( xValue - 1, yValue )
+            else if xValue == maxCoord && yValue == minCoord then
+                ( xValue, yValue + 1 )
+            else if xValue == minCoord && yValue == maxCoord then
+                ( xValue, yValue - 1 )
+            else if xValue == minCoord && yValue == minCoord then
+                ( xValue + 1, yValue )
+            else if xValue == maxCoord then
+                ( xValue, yValue + 1 )
+            else if xValue == minCoord then
+                ( xValue, yValue - 1 )
+            else if yValue == maxCoord then
+                ( xValue - 1, yValue )
+            else if yValue == minCoord then
+                ( xValue + 1, yValue )
+            else
+                ( xValue, yValue )
+
+        newItemValue =
+            getNewElementValue newItemCoords spiralArray
+
+        updatedSpiralArray =
+            Array.push ( Tuple.first newItemCoords, Tuple.second newItemCoords, newItemValue ) spiralArray
+    in
+    if newItemValue > 20 then
+        updatedSpiralArray
+    else
+        createSpiralAdditionArray maxValue newMaxCoords updatedSpiralArray
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    "Answer2"
+    let
+        spiralAdditionList =
+            createSpiralAdditionArray 25 ( 0, 0 ) <|
+                Array.initialize 1 (\_ -> ( 0, 0, 1 ))
+    in
+    -- "Answer2"
+    toString spiralAdditionList
+
+
+
+{--
+||   17 (-2, 2) ||   16 (-1, 2) ||   15 (0, 2) ||    14 (1, 2) ||    13 (2, 2) ||
+||   18 (-2, 1) ||   5  (-1, 1) ||   4  (0, 1) ||    3  (1, 1) ||    12 (2, 1) ||
+||   19 (-2, 0) ||   6  (-1, 0) ||   1  (0, 0) ||    2  (1, 0) ||    11 (2, 0) ||
+||   20 (-2,-1) ||   7  (-1,-1) ||   8  (0,-1) ||    9  (1,-1) ||    10 (2,-1) ||
+||   21 (-2,-2) ||   22 (-1,-2) ||   23 (0,-2) ||    24 (1,-2) ||    25 (2,-2) ||   26 (3, -2)
+--}
