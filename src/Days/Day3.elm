@@ -239,7 +239,8 @@ createSpiralAdditionArray : Int -> Coordinates -> Array ( Int, Int, Int ) -> Arr
 createSpiralAdditionArray maxValue ( maxCoord, minCoord ) spiralArray =
     let
         lastItem =
-            Maybe.withDefault ( 0, 0, 0 ) <| Array.get (Array.length spiralArray - 1) spiralArray
+            Maybe.withDefault ( 0, 0, 0 ) <|
+                Array.get ((-) 1 <| Array.length spiralArray) spiralArray
 
         xValue =
             Triplet.first lastItem
@@ -279,10 +280,13 @@ createSpiralAdditionArray maxValue ( maxCoord, minCoord ) spiralArray =
         updatedSpiralArray =
             Array.push ( Tuple.first newItemCoords, Tuple.second newItemCoords, newItemValue ) spiralArray
     in
-    if newItemValue > 20 then
-        updatedSpiralArray
-    else
-        createSpiralAdditionArray maxValue newMaxCoords updatedSpiralArray
+    -- if newItemValue > 10 then
+    updatedSpiralArray
+
+
+
+-- else
+-- createSpiralAdditionArray maxValue newMaxCoords updatedSpiralArray
 
 
 getPuzzleAnswer2 : String
