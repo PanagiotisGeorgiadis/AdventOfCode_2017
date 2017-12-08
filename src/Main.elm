@@ -6,7 +6,7 @@ import Days.Day3 as Day3
 import Days.Day4 as Day4
 import Days.Day5 as Day5
 import Days.Day6 as Day6
-import Days.Day7 as Day7
+import Days.Day7b as Day7
 import Days.Day8 as Day8
 import Html exposing (..)
 

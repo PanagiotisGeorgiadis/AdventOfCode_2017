@@ -1,0 +1,138 @@
+module Days.Day7b exposing (getPuzzleAnswer, getPuzzleAnswer2)
+
+import Array exposing (Array)
+import Char exposing (isDigit)
+import Days.Day7 exposing (getPuzzleInput)
+
+
+type alias Program =
+    { name : String
+    , weight : Int
+    , discContents : List String
+    }
+
+
+initialProgram : Program
+initialProgram =
+    Program "" 0 []
+
+
+initialProgramWithMaxWeight : Program
+initialProgramWithMaxWeight =
+    Program "" 1000000000 []
+
+
+getNameAndWeightFromString : String -> ( String, Int )
+getNameAndWeightFromString inputLine =
+    let
+        items =
+            String.split " " inputLine
+    in
+    case items of
+        [ a, b ] ->
+            let
+                weight =
+                    Result.withDefault 0 <|
+                        String.toInt <|
+                            String.filter isDigit b
+            in
+            ( a, weight )
+
+        _ ->
+            ( "", 0 )
+
+
+transformRowToBlock : String -> Program
+transformRowToBlock row =
+    let
+        rowCompartments =
+            Array.fromList <|
+                String.split " -> " row
+
+        ( name, weight ) =
+            getNameAndWeightFromString <|
+                Maybe.withDefault "" <|
+                    Array.get 0 rowCompartments
+
+        discContents =
+            if Array.length rowCompartments > 1 then
+                String.split ", " <|
+                    Maybe.withDefault "" <|
+                        Array.get 1 rowCompartments
+            else
+                []
+    in
+    Program name weight discContents
+
+
+getProgramByName : List Program -> String -> Program
+getProgramByName programs name =
+    List.foldl
+        (\p r ->
+            if p.name == name then
+                p
+            else
+                r
+        )
+        initialProgram
+        programs
+
+
+getPuzzleAnswer : String
+getPuzzleAnswer =
+    let
+        puzzleRows =
+            List.map String.trim <|
+                String.lines getPuzzleInput
+
+        programs =
+            List.map transformRowToBlock puzzleRows
+
+        programsWithDiscs =
+            List.filter
+                (\p ->
+                    if List.isEmpty p.discContents then
+                        False
+                    else
+                        True
+                )
+                programs
+
+        bottomProgram =
+            List.filter
+                (\p ->
+                    List.foldl
+                        (\pp r ->
+                            List.foldl
+                                (\disc rr ->
+                                    if p.name == disc || not rr then
+                                        False
+                                    else
+                                        True
+                                )
+                                True
+                                pp.discContents
+                        )
+                        True
+                        programsWithDiscs
+                )
+                programsWithDiscs
+
+        _ =
+            Debug.log "puzzleRows" <| List.length puzzleRows
+
+        _ =
+            Debug.log "programs" <| List.length programs
+
+        _ =
+            Debug.log "programsWithDiscs" <| List.length programsWithDiscs
+
+        _ =
+            Debug.log "bottomProgram" <| List.length bottomProgram
+    in
+    "From Scratch"
+
+
+getPuzzleAnswer2 : String
+getPuzzleAnswer2 =
+    "From Scratch"

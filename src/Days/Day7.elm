@@ -1,4 +1,6 @@
-module Days.Day7 exposing (getPuzzleAnswer, getPuzzleAnswer2)
+module Days.Day7 exposing (getPuzzleInput)
+
+-- module Days.Day7 exposing (getPuzzleAnswer, getPuzzleAnswer2)
 
 import Array exposing (Array)
 import Char exposing (..)
@@ -305,18 +307,59 @@ getPuzzleAnswer2 =
             unbalancedTreeValue
                 + (Maybe.withDefault 0 <| List.head <| List.reverse <| List.take (unbalancedTreeIndex + 1) bottomBlockTreeWeights)
 
-        _ =
-            Debug.log "bottomBlockTreeWeights" bottomBlockTreeWeights
+        -- _ = Debug.log "bottomBlockTreeWeights" bottomBlockTreeWeights
+        -- _ = Debug.log "unbalancedTreeValue" unbalancedTreeValue
+        findBalancedDisc startingBlocks previousUnbalancedTree =
+            let
+                startingDiscBlocks =
+                    List.map
+                        (\b ->
+                            List.map (getBlockFromName puzzleBlocks) b.discContents
+                        )
+                        startingBlocks
 
-        _ =
-            Debug.log "unbalancedTreeValue" unbalancedTreeValue
+                startingDiscBlockWeights =
+                    List.map
+                        (\b ->
+                            List.map getDiscWeight b
+                        )
+                        startingDiscBlocks
 
-        _ =
-            Debug.log "bottomBlock" bottomBlock
+                -- _ =
+                --     Debug.log "startingBlocks" startingBlocks
+                --
+                -- _ =
+                --     Debug.log "startingDiscBlocks" <| List.concat startingDiscBlocks
+                --
+                -- _ =
+                --     Debug.log "startingDiscBlockWeights" startingDiscBlockWeights
+                --
+                -- _ =
+                --     Debug.log "startingDiscBlockWeights + ownWeight" <|
+                --         List.map2
+                --             (\s ss ->
+                --                 List.map
+                --                     (\sdbw ->
+                --                         s.weight + sdbw
+                --                     )
+                --                     ss
+                --             )
+                --             startingBlocks
+                --             startingDiscBlockWeights
+            in
+            if List.isEmpty startingDiscBlockWeights then
+                Maybe.withDefault initialTowerBlock <| List.head <| startingBlocks
+            else
+                findBalancedDisc (List.concat startingDiscBlocks) previousUnbalancedTree
 
-        _ =
-            Debug.log "gjxqx" <| getBlockFromName puzzleBlocks "gjxqx"
-
+        -- _ =
+        --     Debug.log "bottomBlock" bottomBlock
+        --
+        -- _ =
+        --     Debug.log "gtzxxav" <| getBlockFromName puzzleBlocks "gtzxxav"
+        --
+        -- _ =
+        --     Debug.log "findBalancedDisc" <| findBalancedDisc [ getBlockFromName puzzleBlocks "gjxqx" ] []
         getDiscWeight block =
             let
                 discBlocks =
@@ -325,7 +368,24 @@ getPuzzleAnswer2 =
             block.weight
                 + (List.sum <| List.map .weight discBlocks)
 
-        _ =
-            Debug.log "gjxqx weight" <| getDiscWeight <| getBlockFromName puzzleBlocks "gjxqx"
+        -- _ = Debug.log "sphbbz weight" <| getDiscWeight <| getBlockFromName puzzleBlocks "sphbbz"
+        name =
+            "rizjob"
+
+        -- _ =
+        --     Debug.log (name ++ " weight") <|
+        --         (+) (.weight <| getBlockFromName puzzleBlocks name) <|
+        --             List.sum <|
+        --                 List.foldl
+        --                     (\b r ->
+        --                         List.map
+        --                             (\bb ->
+        --                                 getDiscWeight <|
+        --                                     getBlockFromName puzzleBlocks bb
+        --                             )
+        --                             b.discContents
+        --                     )
+        --                     []
+        --                     [ getBlockFromName puzzleBlocks name ]
     in
-    ""
+    "asdasdas"
