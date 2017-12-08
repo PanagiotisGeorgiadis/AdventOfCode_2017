@@ -7,6 +7,7 @@ import Days.Day4 as Day4
 import Days.Day5 as Day5
 import Days.Day6 as Day6
 import Days.Day7 as Day7
+import Days.Day8 as Day8
 import Html exposing (..)
 
 
@@ -58,6 +59,8 @@ view model =
         , dayResultHtml "Day 6b: " Day6.getPuzzleAnswer2
         , dayResultHtml "Day 7a: " Day7.getPuzzleAnswer
         , dayResultHtml "Day 7b: " Day7.getPuzzleAnswer2
+        , dayResultHtml "Day 8a: " Day8.getPuzzleAnswer
+        , dayResultHtml "Day 8b: " Day8.getPuzzleAnswer2
         ]
 
 
