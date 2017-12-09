@@ -1,13 +1,15 @@
 module Main exposing (..)
 
+-- import Days.Day7b as Day7
+
 import Days.Day1 as Day1
 import Days.Day2 as Day2
 import Days.Day3 as Day3
 import Days.Day4 as Day4
 import Days.Day5 as Day5
 import Days.Day6 as Day6
-import Days.Day7b as Day7
 import Days.Day8 as Day8
+import Days.Day9 as Day9
 import Html exposing (..)
 
 
@@ -57,10 +59,13 @@ view model =
         , dayResultHtml "Day 5b: " Day5.getPuzzleAnswer2
         , dayResultHtml "Day 6a: " Day6.getPuzzleAnswer
         , dayResultHtml "Day 6b: " Day6.getPuzzleAnswer2
-        , dayResultHtml "Day 7a: " Day7.getPuzzleAnswer
-        , dayResultHtml "Day 7b: " Day7.getPuzzleAnswer2
+
+        -- , dayResultHtml "Day 7a: " Day7.getPuzzleAnswer
+        -- , dayResultHtml "Day 7b: " Day7.getPuzzleAnswer2
         , dayResultHtml "Day 8a: " Day8.getPuzzleAnswer
         , dayResultHtml "Day 8b: " Day8.getPuzzleAnswer2
+        , dayResultHtml "Day 9a: " Day9.getPuzzleAnswer
+        , dayResultHtml "Day 9b: " Day9.getPuzzleAnswer2
         ]
 
 
