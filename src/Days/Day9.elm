@@ -100,19 +100,30 @@ getGarbageCount input totalScore isSkipped isGarbage =
                     getGarbageCount updatedInput totalScore isSkipped isGarbage
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         scoreCount =
+--             getScoreCount getPuzzleInput 0 0 False False
+--     in
+--     toString scoreCount
+--
+--
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         garbageCount =
+--             getGarbageCount getPuzzleInput 0 False False
+--     in
+--     toString garbageCount
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        scoreCount =
-            getScoreCount getPuzzleInput 0 0 False False
-    in
-    toString scoreCount
+    "17537"
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    let
-        garbageCount =
-            getGarbageCount getPuzzleInput 0 False False
-    in
-    toString garbageCount
+    "7539"

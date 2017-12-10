@@ -78,6 +78,31 @@ getProgramByName programs name =
         programs
 
 
+getBottomProgram : List Program -> List Program
+getBottomProgram programsWithDiscs =
+    List.filter
+        (\p ->
+            List.foldl
+                (\pp r ->
+                    if r then
+                        List.foldl
+                            (\disc rr ->
+                                if p.name == disc || not rr then
+                                    False
+                                else
+                                    True
+                            )
+                            True
+                            pp.discContents
+                    else
+                        r
+                )
+                True
+                programsWithDiscs
+        )
+        programsWithDiscs
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
     let
@@ -99,40 +124,70 @@ getPuzzleAnswer =
                 programs
 
         bottomProgram =
-            List.filter
-                (\p ->
-                    List.foldl
-                        (\pp r ->
-                            List.foldl
-                                (\disc rr ->
-                                    if p.name == disc || not rr then
-                                        False
-                                    else
-                                        True
-                                )
-                                True
-                                pp.discContents
-                        )
-                        True
-                        programsWithDiscs
-                )
-                programsWithDiscs
-
-        _ =
-            Debug.log "puzzleRows" <| List.length puzzleRows
-
-        _ =
-            Debug.log "programs" <| List.length programs
-
-        _ =
-            Debug.log "programsWithDiscs" <| List.length programsWithDiscs
-
-        _ =
-            Debug.log "bottomProgram" <| List.length bottomProgram
+            Maybe.withDefault initialProgram <|
+                List.head <|
+                    getBottomProgram programsWithDiscs
     in
-    "From Scratch"
+    "From Scratch: " ++ toString bottomProgram
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
+    let
+        puzzleRows =
+            List.map String.trim <|
+                String.lines getPuzzleInput
+
+        programs =
+            List.map transformRowToBlock puzzleRows
+
+        svugoProgram =
+            getProgramByName programs "svugo"
+
+        xolvnpyProgram =
+            getProgramByName programs "xolvnpy"
+
+        gjxqxProgram =
+            getProgramByName programs "gjxqx"
+
+        gtzxxavProgram =
+            getProgramByName programs "gtzxxav"
+
+        njorjqProgram =
+            getProgramByName programs "njorjq"
+
+        qpiklvfProgram =
+            getProgramByName programs "qpiklvf"
+
+        getDiscWeight program =
+            let
+                subPrograms =
+                    List.map (getProgramByName programs) program.discContents
+            in
+            program.weight
+                + List.foldl
+                    (\sub r ->
+                        r + sub.weight
+                    )
+                    0
+                    subPrograms
+
+        _ =
+            Debug.log "svugo Weight" <| getDiscWeight svugoProgram
+
+        _ =
+            Debug.log "xolvnpy Weight" <| getDiscWeight xolvnpyProgram
+
+        _ =
+            Debug.log "gjxqx Weight" <| getDiscWeight gjxqxProgram
+
+        _ =
+            Debug.log "gtzxxav Weight" <| getDiscWeight gtzxxavProgram
+
+        _ =
+            Debug.log "njorjq Weight" <| getDiscWeight njorjqProgram
+
+        _ =
+            Debug.log "qpiklvf Weight" <| getDiscWeight qpiklvfProgram
+    in
     "From Scratch"
