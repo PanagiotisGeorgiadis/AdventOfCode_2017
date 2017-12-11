@@ -101,6 +101,47 @@ updateHexCoordinates hexCoords direction =
             hexCoords
 
 
+getChildProcessCoords : List (Maybe Direction) -> HexCoordinates -> HexCoordinates
+getChildProcessCoords directions hexCoords =
+    let
+        updatedDirections =
+            List.drop 1 directions
+
+        targetDirection =
+            Maybe.withDefault Nothing <|
+                List.head <|
+                    List.take 1 directions
+
+        updatedHexCoords =
+            updateHexCoordinates hexCoords targetDirection
+    in
+    if List.isEmpty directions then
+        hexCoords
+    else
+        getChildProcessCoords updatedDirections updatedHexCoords
+
+
+getChildProcessMaximumDistance : List (Maybe Direction) -> HexCoordinates -> HexCoordinates
+getChildProcessMaximumDistance directions maxHexCoords =
+    let
+        updatedDirections =
+            List.drop 1 directions
+
+        targetDirection =
+            Maybe.withDefault Nothing <|
+                List.head <|
+                    List.take 1 directions
+
+        updatedHexCoords =
+            -- Needs edit to determine the max coords.
+            updateHexCoordinates maxHexCoords targetDirection
+    in
+    if List.isEmpty directions then
+        maxHexCoords
+    else
+        getChildProcessMaximumDistance updatedDirections updatedHexCoords
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
     let
@@ -121,26 +162,8 @@ getPuzzleAnswer =
             List.map convertToDirection <|
                 String.split "," getPuzzleInput
 
-        getChildProcessCoords directions previousDirection hexCoords =
-            let
-                updatedDirections =
-                    List.drop 1 directions
-
-                nextDirection =
-                    Maybe.withDefault Nothing <|
-                        List.head <|
-                            List.take 1 directions
-
-                updatedHexCoords =
-                    updateHexCoordinates hexCoords nextDirection
-            in
-            if List.isEmpty directions then
-                hexCoords
-            else
-                getChildProcessCoords updatedDirections nextDirection updatedHexCoords
-
         childProcessCoords =
-            getChildProcessCoords puzzleDirections Nothing ( 0, 0, 0 )
+            getChildProcessCoords puzzleDirections ( 0, 0, 0 )
 
         minimumSteps =
             case childProcessCoords of
