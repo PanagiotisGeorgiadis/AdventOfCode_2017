@@ -101,6 +101,14 @@ updateHexCoordinates hexCoords direction =
             hexCoords
 
 
+getStepCount : HexCoordinates -> Int
+getStepCount childProcessCoords =
+    case childProcessCoords of
+        ( a, b, c ) ->
+            max c <|
+                max a b
+
+
 getChildProcessCoords : List (Maybe Direction) -> HexCoordinates -> HexCoordinates
 getChildProcessCoords directions hexCoords =
     let
@@ -121,8 +129,8 @@ getChildProcessCoords directions hexCoords =
         getChildProcessCoords updatedDirections updatedHexCoords
 
 
-getChildProcessMaximumDistance : List (Maybe Direction) -> HexCoordinates -> HexCoordinates
-getChildProcessMaximumDistance directions maxHexCoords =
+getChildProcessMaximumCoords : List (Maybe Direction) -> HexCoordinates -> HexCoordinates -> HexCoordinates
+getChildProcessMaximumCoords directions prevHexCoords maxHexCoords =
     let
         updatedDirections =
             List.drop 1 directions
@@ -132,14 +140,25 @@ getChildProcessMaximumDistance directions maxHexCoords =
                 List.head <|
                     List.take 1 directions
 
-        updatedHexCoords =
-            -- Needs edit to determine the max coords.
-            updateHexCoordinates maxHexCoords targetDirection
+        newHexCoords =
+            updateHexCoordinates prevHexCoords targetDirection
+
+        maxStepCount =
+            getStepCount maxHexCoords
+
+        newStepCount =
+            getStepCount newHexCoords
+
+        updatedMaxHexCoords =
+            if newStepCount > maxStepCount then
+                newHexCoords
+            else
+                maxHexCoords
     in
     if List.isEmpty directions then
         maxHexCoords
     else
-        getChildProcessMaximumDistance updatedDirections updatedHexCoords
+        getChildProcessMaximumCoords updatedDirections newHexCoords updatedMaxHexCoords
 
 
 getPuzzleAnswer : String
@@ -165,15 +184,20 @@ getPuzzleAnswer =
         childProcessCoords =
             getChildProcessCoords puzzleDirections ( 0, 0, 0 )
 
-        minimumSteps =
-            case childProcessCoords of
-                ( a, b, c ) ->
-                    max c <|
-                        max a b
+        steps =
+            getStepCount childProcessCoords
     in
-    toString minimumSteps
+    toString steps
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    ""
+    let
+        puzzleDirections =
+            List.map convertToDirection <|
+                String.split "," getPuzzleInput
+
+        maxHexCoords =
+            getChildProcessMaximumCoords puzzleDirections ( 0, 0, 0 ) ( 0, 0, 0 )
+    in
+    toString <| getStepCount maxHexCoords
