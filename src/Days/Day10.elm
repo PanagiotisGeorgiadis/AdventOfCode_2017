@@ -257,10 +257,11 @@ applyKnotHash list currentPosition skipSize sequenceOfLengths =
         --         list
         --         updatedSelectedLengths
         updatedList =
-            if List.length updatedSelections > 1 then
-                updateMultiSegmentList list updatedSelections currentPosition
-            else
-                updateMultiSegmentList list updatedSelections currentPosition
+            -- if List.length updatedSelections > 1 then
+            --     updateMultiSegmentList list updatedSelections currentPosition
+            -- else
+            --     updateMultiSegmentList list updatedSelections currentPosition
+            []
 
         updatedCurrentPosition =
             if currentPosition + selectedLength + skipSize > listLength then

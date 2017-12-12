@@ -161,43 +161,54 @@ getChildProcessMaximumCoords directions prevHexCoords maxHexCoords =
         getChildProcessMaximumCoords updatedDirections newHexCoords updatedMaxHexCoords
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         {--
+--             ne,ne,ne is 3 steps away.
+--             ne,ne,sw,sw is 0 steps away (back where you started).
+--             ne,ne,s,s is 2 steps away (se,se).
+--             se,sw,se,sw,sw is 3 steps away (s,s,sw).
+--         --}
+--         examplesList =
+--             [ "ne,ne,ne" -- 3 ()
+--             , "ne,ne,sw,sw" -- 0 ()
+--             , "ne,ne,s,s" -- 2 (se,se)
+--             , "se,sw,se,sw,sw" -- 3 (s,s,sw)
+--             ]
+--
+--         puzzleDirections =
+--             List.map convertToDirection <|
+--                 String.split "," getPuzzleInput
+--
+--         childProcessCoords =
+--             getChildProcessCoords puzzleDirections ( 0, 0, 0 )
+--
+--         steps =
+--             getStepCount childProcessCoords
+--     in
+--     toString steps
+--
+--
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         puzzleDirections =
+--             List.map convertToDirection <|
+--                 String.split "," getPuzzleInput
+--
+--         maxHexCoords =
+--             getChildProcessMaximumCoords puzzleDirections ( 0, 0, 0 ) ( 0, 0, 0 )
+--     in
+--     toString <| getStepCount maxHexCoords
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        {--
-            ne,ne,ne is 3 steps away.
-            ne,ne,sw,sw is 0 steps away (back where you started).
-            ne,ne,s,s is 2 steps away (se,se).
-            se,sw,se,sw,sw is 3 steps away (s,s,sw).
-        --}
-        examplesList =
-            [ "ne,ne,ne" -- 3 ()
-            , "ne,ne,sw,sw" -- 0 ()
-            , "ne,ne,s,s" -- 2 (se,se)
-            , "se,sw,se,sw,sw" -- 3 (s,s,sw)
-            ]
-
-        puzzleDirections =
-            List.map convertToDirection <|
-                String.split "," getPuzzleInput
-
-        childProcessCoords =
-            getChildProcessCoords puzzleDirections ( 0, 0, 0 )
-
-        steps =
-            getStepCount childProcessCoords
-    in
-    toString steps
+    "743"
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    let
-        puzzleDirections =
-            List.map convertToDirection <|
-                String.split "," getPuzzleInput
-
-        maxHexCoords =
-            getChildProcessMaximumCoords puzzleDirections ( 0, 0, 0 ) ( 0, 0, 0 )
-    in
-    toString <| getStepCount maxHexCoords
+    "1493"
