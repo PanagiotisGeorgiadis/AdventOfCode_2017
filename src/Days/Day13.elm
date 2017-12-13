@@ -132,79 +132,6 @@ runTripAndGetSeverity index firewallLayers severity =
         runTripAndGetSeverity updatedIndex updatedFirewallLayers updatedSeverity
 
 
-
--- getPuzzleAnswer : String
--- getPuzzleAnswer =
---     let
---         firewallLayers =
---             getFirewallLayers
---
---         severity =
---             runTripAndGetSeverity 0 firewallLayers 0
---     in
---     toString severity
---
---
--- checkIfTripWithDelayIsSafe : Int -> List Layer -> Int -> Bool
--- checkIfTripWithDelayIsSafe index firewallLayers delayTicks =
---     let
---         ( updatedIndex, updatedDelayTicks ) =
---             if delayTicks > 0 then
---                 ( index, delayTicks - 1 )
---             else
---                 ( index + 1, delayTicks )
---
---         isLayerWithScanner =
---             List.any (\layer -> layer.depth == index) firewallLayers
---
---         isCaught =
---             if isLayerWithScanner then
---                 Tuple.second <|
---                     getSeverityFromIndex index firewallLayers
---             else
---                 False
---
---         remainingFirewallLayers =
---             if isLayerWithScanner then
---                 List.drop 1 firewallLayers
---             else
---                 firewallLayers
---
---         updatedFirewallLayers =
---             moveScanners remainingFirewallLayers
---
---         -- _ =
---         --     Debug.log "index" index
---         --
---         -- _ =
---         --     Debug.log "delayTicks" delayTicks
---         --
---         -- _ =
---         --     Debug.log "firewallLayers" firewallLayers
---         --
---         -- _ =
---         --     Debug.log "isCaught" isCaught
---     in
---     if isCaught then
---         False
---     else if List.isEmpty firewallLayers then
---         True
---     else
---         checkIfTripWithDelayIsSafe updatedIndex updatedFirewallLayers updatedDelayTicks
-
-
-fastForwardScanners : List Layer -> Int -> List Layer
-fastForwardScanners firewallLayers numberOfTicks =
-    let
-        updatedFirewallLayers =
-            moveScanners firewallLayers
-    in
-    if numberOfTicks == 0 then
-        firewallLayers
-    else
-        fastForwardScanners updatedFirewallLayers (numberOfTicks - 1)
-
-
 runTripAndCheckIfCaught : Int -> List Layer -> Bool
 runTripAndCheckIfCaught index firewallLayers =
     let
@@ -245,29 +172,47 @@ runTripWithoutGettingCaught firewallLayers delayTicks =
             delayTicks + 1
 
         updatedFirewallLayers =
-            fastForwardScanners firewallLayers delayTicks
+            moveScanners firewallLayers
 
         isSafeTrip =
             runTripAndCheckIfCaught 0 updatedFirewallLayers
     in
     if isSafeTrip then
-        delayTicks
+        updatedDelayTicks
     else
-        runTripWithoutGettingCaught firewallLayers updatedDelayTicks
+        runTripWithoutGettingCaught updatedFirewallLayers updatedDelayTicks
 
 
-getPuzzleAnswer2 : String
-getPuzzleAnswer2 =
-    let
-        firewallLayers =
-            getFirewallLayers
 
-        delayNeeded =
-            runTripWithoutGettingCaught firewallLayers 0
-    in
-    toString delayNeeded
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         firewallLayers =
+--             getFirewallLayers
+--
+--         severity =
+--             runTripAndGetSeverity 0 firewallLayers 0
+--     in
+--     toString severity
+--
+--
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         firewallLayers =
+--             getFirewallLayers
+--
+--         delayNeeded =
+--             runTripWithoutGettingCaught firewallLayers 0
+--     in
+--     toString delayNeeded
 
 
 getPuzzleAnswer : String
 getPuzzleAnswer =
     "1960"
+
+
+getPuzzleAnswer2 : String
+getPuzzleAnswer2 =
+    "3903378"
