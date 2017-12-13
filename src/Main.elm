@@ -19,7 +19,7 @@ import Days.Day10 as Day10
 import Days.Day11 as Day11
 import Days.Day12 as Day12
 import Days.Day2 as Day2
-import Days.Day3 as Day3
+import Days.Day3b as Day3
 import Days.Day4 as Day4
 import Days.Day5 as Day5
 import Days.Day6 as Day6
