@@ -375,9 +375,10 @@ getPuzzleAnswer =
         --         (List.map String.toInt sequenceOfLengths)
     in
     -- toString <| applyKnotHash initialList 0 0 sequenceOfLengths
-    toString <| applyKnotHash exampleList 0 0 exampleSequenceOfLengths
+    -- toString <| applyKnotHash exampleList 0 0 exampleSequenceOfLengths
+    "Needs Work"
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    ""
+    "Needs Work"

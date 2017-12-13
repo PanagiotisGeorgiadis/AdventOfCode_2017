@@ -16,73 +16,84 @@ getRowElements row =
         (String.split ", " row)
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         spreadsheetRows =
+--             String.split "| " puzzleInput
+--
+--         minMaxList =
+--             List.map
+--                 (\row ->
+--                     let
+--                         rowElements =
+--                             getRowElements row
+--                     in
+--                     ( List.minimum rowElements, List.maximum rowElements )
+--                 )
+--                 spreadsheetRows
+--
+--         checkSum =
+--             List.foldl
+--                 (\item r ->
+--                     case ( Tuple.first item, Tuple.second item ) of
+--                         ( Just a, Just b ) ->
+--                             r + (b - a)
+--
+--                         _ ->
+--                             r
+--                 )
+--                 0
+--                 minMaxList
+--     in
+--     toString <| checkSum
+--
+--
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         spreadsheetRows =
+--             String.split "| " puzzleInput
+--
+--         evenlyDivisibleElements =
+--             List.map
+--                 (\row ->
+--                     let
+--                         rowElements =
+--                             getRowElements row
+--                     in
+--                     List.foldl
+--                         (\element r ->
+--                             List.foldr
+--                                 (\reversedElement rr ->
+--                                     if element % reversedElement == 0 && not (element == reversedElement) then
+--                                         element // reversedElement
+--                                     else
+--                                         rr
+--                                 )
+--                                 r
+--                                 rowElements
+--                         )
+--                         0
+--                         rowElements
+--                 )
+--                 spreadsheetRows
+--     in
+--     toString <|
+--         List.foldl
+--             (\element r ->
+--                 r + element
+--             )
+--             0
+--             evenlyDivisibleElements
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        spreadsheetRows =
-            String.split "| " puzzleInput
-
-        minMaxList =
-            List.map
-                (\row ->
-                    let
-                        rowElements =
-                            getRowElements row
-                    in
-                    ( List.minimum rowElements, List.maximum rowElements )
-                )
-                spreadsheetRows
-
-        checkSum =
-            List.foldl
-                (\item r ->
-                    case ( Tuple.first item, Tuple.second item ) of
-                        ( Just a, Just b ) ->
-                            r + (b - a)
-
-                        _ ->
-                            r
-                )
-                0
-                minMaxList
-    in
-    toString <| checkSum
+    "37923"
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    let
-        spreadsheetRows =
-            String.split "| " puzzleInput
-
-        evenlyDivisibleElements =
-            List.map
-                (\row ->
-                    let
-                        rowElements =
-                            getRowElements row
-                    in
-                    List.foldl
-                        (\element r ->
-                            List.foldr
-                                (\reversedElement rr ->
-                                    if element % reversedElement == 0 && not (element == reversedElement) then
-                                        element // reversedElement
-                                    else
-                                        rr
-                                )
-                                r
-                                rowElements
-                        )
-                        0
-                        rowElements
-                )
-                spreadsheetRows
-    in
-    toString <|
-        List.foldl
-            (\element r ->
-                r + element
-            )
-            0
-            evenlyDivisibleElements
+    "263"

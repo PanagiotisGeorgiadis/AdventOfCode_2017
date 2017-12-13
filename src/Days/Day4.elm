@@ -530,31 +530,6 @@ isInvalidPassphrase words row =
         words
 
 
-getPuzzleAnswer : String
-getPuzzleAnswer =
-    let
-        puzzleInputRows =
-            String.lines puzzleInput
-
-        validRows =
-            List.foldl
-                (\row r ->
-                    let
-                        passphraseWords =
-                            List.filter (\word -> not <| String.isEmpty word) <|
-                                String.split " " row
-                    in
-                    if isInvalidPassphrase passphraseWords row then
-                        r
-                    else
-                        r + 1
-                )
-                0
-                puzzleInputRows
-    in
-    toString <| validRows
-
-
 isAnagram : String -> String -> Bool
 isAnagram firstWord secondWord =
     let
@@ -581,44 +556,80 @@ isAnagram firstWord secondWord =
         False
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         puzzleInputRows =
+--             String.lines puzzleInput
+--
+--         validRows =
+--             List.foldl
+--                 (\row r ->
+--                     let
+--                         passphraseWords =
+--                             List.filter (\word -> not <| String.isEmpty word) <|
+--                                 String.split " " row
+--                     in
+--                     if isInvalidPassphrase passphraseWords row then
+--                         r
+--                     else
+--                         r + 1
+--                 )
+--                 0
+--                 puzzleInputRows
+--     in
+--     toString <| validRows
+--
+--
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         puzzleInputRows =
+--             String.lines puzzleInput
+--
+--         validRows =
+--             List.foldl
+--                 (\row r ->
+--                     let
+--                         passphraseWords =
+--                             List.filter (\word -> not <| String.isEmpty word) <|
+--                                 String.split " " row
+--
+--                         isInvalid =
+--                             isInvalidPassphrase passphraseWords row
+--
+--                         containsAnagram =
+--                             List.any
+--                                 (\word ->
+--                                     let
+--                                         filteredWords =
+--                                             List.filter (\w -> not <| w == word) <|
+--                                                 List.filter (\word -> not <| String.isEmpty word) <|
+--                                                     String.split " " row
+--                                     in
+--                                     List.any
+--                                         (isAnagram word)
+--                                         filteredWords
+--                                 )
+--                                 passphraseWords
+--                     in
+--                     if isInvalid || containsAnagram then
+--                         r
+--                     else
+--                         r + 1
+--                 )
+--                 0
+--                 puzzleInputRows
+--     in
+--     toString <| validRows
+
+
+getPuzzleAnswer : String
+getPuzzleAnswer =
+    "337"
+
+
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    let
-        puzzleInputRows =
-            String.lines puzzleInput
-
-        validRows =
-            List.foldl
-                (\row r ->
-                    let
-                        passphraseWords =
-                            List.filter (\word -> not <| String.isEmpty word) <|
-                                String.split " " row
-
-                        isInvalid =
-                            isInvalidPassphrase passphraseWords row
-
-                        containsAnagram =
-                            List.any
-                                (\word ->
-                                    let
-                                        filteredWords =
-                                            List.filter (\w -> not <| w == word) <|
-                                                List.filter (\word -> not <| String.isEmpty word) <|
-                                                    String.split " " row
-                                    in
-                                    List.any
-                                        (isAnagram word)
-                                        filteredWords
-                                )
-                                passphraseWords
-                    in
-                    if isInvalid || containsAnagram then
-                        r
-                    else
-                        r + 1
-                )
-                0
-                puzzleInputRows
-    in
-    toString <| validRows
+    "231"

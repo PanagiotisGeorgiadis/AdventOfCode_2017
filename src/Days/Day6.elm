@@ -101,31 +101,40 @@ getStepsForMemoryAllocation memoryBanks history steps shouldExecuteAgain =
         steps + 1
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         puzzleInput =
+--             Array.fromList <|
+--                 List.map (Result.withDefault -1 << String.toInt) <|
+--                     String.split " " getPuzzleInput
+--
+--         stepsForMemoryAllocation =
+--             getStepsForMemoryAllocation puzzleInput [ Array.initialize 0 identity ] 0 False
+--     in
+--     toString stepsForMemoryAllocation
+--
+--
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         puzzleInput =
+--             Array.fromList <|
+--                 List.map (Result.withDefault -1 << String.toInt) <|
+--                     String.split " " getPuzzleInput
+--
+--         stepsForSecondMemoryAllocation =
+--             getStepsForMemoryAllocation puzzleInput [ Array.initialize 0 identity ] 0 True
+--     in
+--     toString stepsForSecondMemoryAllocation
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        puzzleInput =
-            Array.fromList <|
-                List.map (Result.withDefault -1 << String.toInt) <|
-                    -- String.split " " getPuzzleInput
-                    String.split " " getExampleInput
-
-        stepsForMemoryAllocation =
-            getStepsForMemoryAllocation puzzleInput [ Array.initialize 0 identity ] 0 False
-    in
-    "Answer for Example Input because it takes too long to execute the puzzle answer: " ++ toString stepsForMemoryAllocation
+    "6681"
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    let
-        puzzleInput =
-            Array.fromList <|
-                List.map (Result.withDefault -1 << String.toInt) <|
-                    -- String.split " " getPuzzleInput
-                    String.split " " getExampleInput
-
-        stepsForSecondMemoryAllocation =
-            getStepsForMemoryAllocation puzzleInput [ Array.initialize 0 identity ] 0 True
-    in
-    "Answer 2 for Example Input because it takes too long to execute the puzzle answer: " ++ toString stepsForSecondMemoryAllocation
+    "2392"

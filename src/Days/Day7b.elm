@@ -103,91 +103,106 @@ getBottomProgram programsWithDiscs =
         programsWithDiscs
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         puzzleRows =
+--             List.map String.trim <|
+--                 String.lines getPuzzleInput
+--
+--         programs =
+--             List.map transformRowToBlock puzzleRows
+--
+--         programsWithDiscs =
+--             List.filter
+--                 (\p ->
+--                     if List.isEmpty p.discContents then
+--                         False
+--                     else
+--                         True
+--                 )
+--                 programs
+--
+--         bottomProgram =
+--             Maybe.withDefault initialProgram <|
+--                 List.head <|
+--                     getBottomProgram programsWithDiscs
+--     in
+--     "From Scratch: " ++ toString bottomProgram
+--
+--
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         puzzleRows =
+--             List.map String.trim <|
+--                 String.lines getPuzzleInput
+--
+--         programs =
+--             List.map transformRowToBlock puzzleRows
+--
+--         svugoProgram =
+--             getProgramByName programs "svugo"
+--
+--         xolvnpyProgram =
+--             getProgramByName programs "xolvnpy"
+--
+--         gjxqxProgram =
+--             getProgramByName programs "gjxqx"
+--
+--         gtzxxavProgram =
+--             getProgramByName programs "gtzxxav"
+--
+--         njorjqProgram =
+--             getProgramByName programs "njorjq"
+--
+--         qpiklvfProgram =
+--             getProgramByName programs "qpiklvf"
+--
+--         getDiscWeight program =
+--             let
+--                 subPrograms =
+--                     List.map (getProgramByName programs) program.discContents
+--             in
+--             program.weight
+--                 + List.foldl
+--                     (\sub r ->
+--                         r + sub.weight
+--                     )
+--                     0
+--                     subPrograms
+--
+--         _ =
+--             Debug.log "svugo Weight" <| getDiscWeight svugoProgram
+--
+--         _ =
+--             Debug.log "xolvnpy Weight" <| getDiscWeight xolvnpyProgram
+--
+--         _ =
+--             Debug.log "gjxqx Weight" <| getDiscWeight gjxqxProgram
+--
+--         _ =
+--             Debug.log "gtzxxav Weight" <| getDiscWeight gtzxxavProgram
+--
+--         _ =
+--             Debug.log "njorjq Weight" <| getDiscWeight njorjqProgram
+--
+--         _ =
+--             Debug.log "qpiklvf Weight" <| getDiscWeight qpiklvfProgram
+--     in
+--     "From Scratch"
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
     let
-        puzzleRows =
-            List.map String.trim <|
-                String.lines getPuzzleInput
-
-        programs =
-            List.map transformRowToBlock puzzleRows
-
-        programsWithDiscs =
-            List.filter
-                (\p ->
-                    if List.isEmpty p.discContents then
-                        False
-                    else
-                        True
-                )
-                programs
-
         bottomProgram =
-            Maybe.withDefault initialProgram <|
-                List.head <|
-                    getBottomProgram programsWithDiscs
+            { name = "svugo", weight = 32, discContents = [ "xolvnpy", "gjxqx", "gtzxxav", "njorjq", "qpiklvf" ] }
     in
-    "From Scratch: " ++ toString bottomProgram
+    "From Scratch: Solved " ++ toString bottomProgram
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    let
-        puzzleRows =
-            List.map String.trim <|
-                String.lines getPuzzleInput
-
-        programs =
-            List.map transformRowToBlock puzzleRows
-
-        svugoProgram =
-            getProgramByName programs "svugo"
-
-        xolvnpyProgram =
-            getProgramByName programs "xolvnpy"
-
-        gjxqxProgram =
-            getProgramByName programs "gjxqx"
-
-        gtzxxavProgram =
-            getProgramByName programs "gtzxxav"
-
-        njorjqProgram =
-            getProgramByName programs "njorjq"
-
-        qpiklvfProgram =
-            getProgramByName programs "qpiklvf"
-
-        getDiscWeight program =
-            let
-                subPrograms =
-                    List.map (getProgramByName programs) program.discContents
-            in
-            program.weight
-                + List.foldl
-                    (\sub r ->
-                        r + sub.weight
-                    )
-                    0
-                    subPrograms
-
-        _ =
-            Debug.log "svugo Weight" <| getDiscWeight svugoProgram
-
-        _ =
-            Debug.log "xolvnpy Weight" <| getDiscWeight xolvnpyProgram
-
-        _ =
-            Debug.log "gjxqx Weight" <| getDiscWeight gjxqxProgram
-
-        _ =
-            Debug.log "gtzxxav Weight" <| getDiscWeight gtzxxavProgram
-
-        _ =
-            Debug.log "njorjq Weight" <| getDiscWeight njorjqProgram
-
-        _ =
-            Debug.log "qpiklvf Weight" <| getDiscWeight qpiklvfProgram
-    in
-    "From Scratch"
+    "Needs Work"

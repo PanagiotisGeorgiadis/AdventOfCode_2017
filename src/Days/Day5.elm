@@ -97,31 +97,40 @@ countStepsToExit isSecondPuzzle steps selectedIndex instructionArray =
         countStepsToExit isSecondPuzzle newSteps newIndex newInstructionArray
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         mazeInstructions =
+--             List.map
+--                 (Result.withDefault 0 << String.toInt << String.trim)
+--                 (List.filter (\s -> not <| String.isEmpty s) <| String.lines getPuzzleInput)
+--
+--         stepsToExit =
+--             countStepsToExit False 0 0 (Array.fromList mazeInstructions)
+--     in
+--     toString stepsToExit
+--
+--
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         mazeInstructions =
+--             List.map
+--                 (Result.withDefault 0 << String.toInt << String.trim)
+--                 (List.filter (\s -> not <| String.isEmpty s) <| String.lines getPuzzleInput)
+--
+--         stepsToExit =
+--             countStepsToExit True 0 0 (Array.fromList mazeInstructions)
+--     in
+--     toString stepsToExit
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        mazeInstructions =
-            List.map
-                (Result.withDefault 0 << String.toInt << String.trim)
-                -- (List.filter (\s -> not <| String.isEmpty s) <| String.lines getPuzzleInput)
-                (List.filter (\s -> not <| String.isEmpty s) <| String.lines getExampleInput)
-
-        stepsToExit =
-            countStepsToExit False 0 0 (Array.fromList mazeInstructions)
-    in
-    "Answer for Example Input because it takes too long to execute the puzzle answer: " ++ toString stepsToExit
+    "381680"
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    let
-        mazeInstructions =
-            List.map
-                (Result.withDefault 0 << String.toInt << String.trim)
-                -- (List.filter (\s -> not <| String.isEmpty s) <| String.lines getPuzzleInput)
-                (List.filter (\s -> not <| String.isEmpty s) <| String.lines getExampleInput)
-
-        stepsToExit =
-            countStepsToExit True 0 0 (Array.fromList mazeInstructions)
-    in
-    "Answer for Example Input because it takes too long to execute the puzzle answer: " ++ toString stepsToExit
+    "29717847"

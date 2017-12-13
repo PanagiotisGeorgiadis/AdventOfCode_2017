@@ -192,6 +192,8 @@ applyInstruction registers instruction =
 --                     List.map .value updatedRegisters
 --     in
 --     toString maximumRegisterValue
+--
+--
 -- getPuzzleAnswer2 : String
 -- getPuzzleAnswer2 =
 --     let
