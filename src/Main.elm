@@ -27,6 +27,7 @@ import Days.Day7b as Day7
 import Days.Day8 as Day8
 import Days.Day9 as Day9
 import Html exposing (..)
+import Html.Attributes exposing (class)
 
 
 ---- MODEL ----
@@ -63,40 +64,40 @@ view model =
     div []
         [ h2 [] [ text "Welcome to Advent Of Code 2017 in Elm." ]
         , br [] []
-        , dayResultHtml "Day 1a: " Day1.getPuzzleAnswer
-        , dayResultHtml "Day 1b: " Day1.getPuzzleAnswer2
-        , dayResultHtml "Day 2a: " Day2.getPuzzleAnswer
-        , dayResultHtml "Day 2b: " Day2.getPuzzleAnswer2
-        , dayResultHtml "Day 3a: " Day3.getPuzzleAnswer
-        , dayResultHtml "Day 3b: " Day3.getPuzzleAnswer2
-        , dayResultHtml "Day 4a: " Day4.getPuzzleAnswer
-        , dayResultHtml "Day 4b: " Day4.getPuzzleAnswer2
-        , dayResultHtml "Day 5a: " Day5.getPuzzleAnswer
-        , dayResultHtml "Day 5b: " Day5.getPuzzleAnswer2
-        , dayResultHtml "Day 6a: " Day6.getPuzzleAnswer
-        , dayResultHtml "Day 6b: " Day6.getPuzzleAnswer2
-        , dayResultHtml "Day 7a: " Day7.getPuzzleAnswer
-        , dayResultHtml "Day 7b: " Day7.getPuzzleAnswer2
-        , dayResultHtml "Day 8a: " Day8.getPuzzleAnswer
-        , dayResultHtml "Day 8b: " Day8.getPuzzleAnswer2
-        , dayResultHtml "Day 9a: " Day9.getPuzzleAnswer
-        , dayResultHtml "Day 9b: " Day9.getPuzzleAnswer2
-        , dayResultHtml "Day 10a: " Day10.getPuzzleAnswer
-        , dayResultHtml "Day 10b: " Day10.getPuzzleAnswer2
-        , dayResultHtml "Day 11a: " Day11.getPuzzleAnswer
-        , dayResultHtml "Day 11b: " Day11.getPuzzleAnswer2
-        , dayResultHtml "Day 12a: " Day12.getPuzzleAnswer
-        , dayResultHtml "Day 12b: " Day12.getPuzzleAnswer2
-        , dayResultHtml "Day 13a: " Day13.getPuzzleAnswer
-        , dayResultHtml "Day 13b: " Day13.getPuzzleAnswer2
-        , dayResultHtml "Day 14a: " Day14.getPuzzleAnswer
-        , dayResultHtml "Day 14b: " Day14.getPuzzleAnswer2
+        , dayResultHtml "Day 1a: " "done" Day1.getPuzzleAnswer
+        , dayResultHtml "Day 1b: " "done" Day1.getPuzzleAnswer2
+        , dayResultHtml "Day 2a: " "done" Day2.getPuzzleAnswer
+        , dayResultHtml "Day 2b: " "done" Day2.getPuzzleAnswer2
+        , dayResultHtml "Day 3a: " "done" Day3.getPuzzleAnswer
+        , dayResultHtml "Day 3b: " "done" Day3.getPuzzleAnswer2
+        , dayResultHtml "Day 4a: " "done" Day4.getPuzzleAnswer
+        , dayResultHtml "Day 4b: " "done" Day4.getPuzzleAnswer2
+        , dayResultHtml "Day 5a: " "done" Day5.getPuzzleAnswer
+        , dayResultHtml "Day 5b: " "done" Day5.getPuzzleAnswer2
+        , dayResultHtml "Day 6a: " "done" Day6.getPuzzleAnswer
+        , dayResultHtml "Day 6b: " "done" Day6.getPuzzleAnswer2
+        , dayResultHtml "Day 7a: " "done" Day7.getPuzzleAnswer
+        , dayResultHtml "Day 7b: " "in-progress" Day7.getPuzzleAnswer2
+        , dayResultHtml "Day 8a: " "done" Day8.getPuzzleAnswer
+        , dayResultHtml "Day 8b: " "done" Day8.getPuzzleAnswer2
+        , dayResultHtml "Day 9a: " "done" Day9.getPuzzleAnswer
+        , dayResultHtml "Day 9b: " "done" Day9.getPuzzleAnswer2
+        , dayResultHtml "Day 10a: " "done" Day10.getPuzzleAnswer
+        , dayResultHtml "Day 10b: " "in-progress" Day10.getPuzzleAnswer2
+        , dayResultHtml "Day 11a: " "done" Day11.getPuzzleAnswer
+        , dayResultHtml "Day 11b: " "done" Day11.getPuzzleAnswer2
+        , dayResultHtml "Day 12a: " "done" Day12.getPuzzleAnswer
+        , dayResultHtml "Day 12b: " "done" Day12.getPuzzleAnswer2
+        , dayResultHtml "Day 13a: " "done" Day13.getPuzzleAnswer
+        , dayResultHtml "Day 13b: " "done" Day13.getPuzzleAnswer2
+        , dayResultHtml "Day 14a: " "in-progress" Day14.getPuzzleAnswer
+        , dayResultHtml "Day 14b: " "in-progress" Day14.getPuzzleAnswer2
         ]
 
 
-dayResultHtml : String -> String -> Html Msg
-dayResultHtml title answer =
-    div []
+dayResultHtml : String -> String -> String -> Html Msg
+dayResultHtml title className answer =
+    div [ class className ]
         [ text title
         , text answer
         ]

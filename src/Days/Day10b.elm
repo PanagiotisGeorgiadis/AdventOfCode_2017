@@ -1,6 +1,7 @@
 module Days.Day10b exposing (getPuzzleAnswer, getPuzzleAnswer2)
 
 import Array exposing (..)
+import Bitwise as Bitwise
 
 
 getPuzzleInput : String
@@ -41,12 +42,9 @@ updateArray inputArray selectedIndexes selectedElements =
             Array.set index value inputArray
 
         updatedSelectedIndexes =
-            -- Array.slice 1 <| Array.length selectedIndexes
-            -- Array.toList selectedIndexes
             List.drop 1 selectedIndexes
 
         updatedSelectedElements =
-            -- Array.slice 1 <| Array.length selectedElements
             List.drop 1 selectedElements
     in
     if List.isEmpty selectedElements then
@@ -76,25 +74,8 @@ getUpdatedArray inputArray selectionRanges =
                     )
                     selectedIndexes
 
-        _ =
-            Debug.log "selectionRanges" selectionRanges
-
         updatedArray =
-            -- List.foldl
-            --     (\index r ->
-            --         let
-            --             newElement =
-            --                 Maybe.withDefault -1 <|
-            --                     Array.get index selectedElements
-            --         in
-            --         Array.set index newElement r
-            --     )
-            --     inputArray
-            --     selectedIndexes
             updateArray inputArray selectedIndexes selectedElements
-
-        _ =
-            Debug.log "updatedArray" updatedArray
     in
     updatedArray
 
@@ -120,8 +101,8 @@ updateAllParameters inputArray currentPosition skipSize sequenceOfLengths select
     ( updatedCurrentPosition, updatedSkipSize, updatedSequenceOfLengths )
 
 
-calculateKnotHash : Array Int -> Int -> Int -> List Int -> Array Int
-calculateKnotHash inputArray currentPosition skipSize sequenceOfLengths =
+applyKnotHash : Array Int -> Int -> Int -> List Int -> Array Int
+applyKnotHash inputArray currentPosition skipSize sequenceOfLengths =
     let
         selectedLength =
             Maybe.withDefault -1 <|
@@ -132,7 +113,7 @@ calculateKnotHash inputArray currentPosition skipSize sequenceOfLengths =
                 []
             else if currentPosition + selectedLength >= Array.length inputArray then
                 [ ( currentPosition, Array.length inputArray )
-                , ( 0, Array.length inputArray - currentPosition )
+                , ( 0, selectedLength - (Array.length inputArray - currentPosition) )
                 ]
             else
                 [ ( currentPosition, currentPosition + selectedLength ) ]
@@ -146,39 +127,116 @@ calculateKnotHash inputArray currentPosition skipSize sequenceOfLengths =
     if List.isEmpty sequenceOfLengths then
         inputArray
     else
-        calculateKnotHash updatedArray updatedCurrentPosition updatedSkipSize updatedSequenceOfLengths
+        applyKnotHash updatedArray updatedCurrentPosition updatedSkipSize updatedSequenceOfLengths
+
+
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         inputArray =
+--             Array.fromList <|
+--                 -- List.range 0 4
+--                 List.range 0 255
+--
+--         sequenceOfLengths =
+--             List.map
+--                 (\item ->
+--                     Result.withDefault -1 <|
+--                         String.toInt item
+--                 )
+--                 -- (String.split "," getExampleInput)
+--                 (String.split "," getPuzzleInput)
+--
+--         knotHashArray =
+--             applyKnotHash inputArray 0 0 sequenceOfLengths
+--
+--         firstElemements =
+--             List.product <|
+--                 List.take 2 <|
+--                     Array.toList knotHashArray
+--     in
+--     toString firstElemements
 
 
 getPuzzleAnswer : String
 getPuzzleAnswer =
+    "6909"
+
+
+getSecondPuzzleInput : String
+getSecondPuzzleInput =
+    -- "106,118,236,1,130,0,235,254,59,205,2,87,129,25,255,118"
+    "049,048,054,044,049,049,056,044,050,051,054,044,049,044,049,051,048,044,048,044,050,051,053,044,050,053,052,044,053,057,044,050,048,053,044,050,044,056,055,044,049,050,057,044,050,053,044,050,053,053,044,049,049,056"
+
+
+getSparseHash : Array Int -> List Int -> Array Int
+getSparseHash inputArray sequenceOfLengths =
     let
-        inputArray =
-            Array.fromList <|
-                -- List.range 0 255
-                List.range 0 4
-
-        sequenceOfLengths =
-            -- Array.fromList <|
-            List.map
-                (\item ->
-                    Result.withDefault -1 <|
-                        String.toInt item
+        updatedSequenceOfLengths =
+            List.foldl
+                (\_ r ->
+                    List.append r sequenceOfLengths
                 )
-                -- (String.split "," getPuzzleInput)
-                (String.split "," getExampleInput)
+                []
+                (List.range 0 63)
 
-        knotHashArray =
-            -- Array.map (calculateKnotHash inputArray 0 0) sequenceOfLengths
-            calculateKnotHash inputArray 0 0 sequenceOfLengths
-
-        firstElemements =
-            List.product <|
-                List.take 2 <|
-                    Array.toList knotHashArray
+        sparseHashArray =
+            applyKnotHash inputArray 0 0 updatedSequenceOfLengths
     in
-    toString firstElemements
+    sparseHashArray
+
+
+
+-- Array.fromList []
+
+
+performBitwiseXOR : Array Int -> Int -> Int
+performBitwiseXOR array previousResult =
+    let
+        ( updatedArray, result ) =
+            ( Array.slice 1 (Array.length array) array
+            , Bitwise.xor previousResult <| Maybe.withDefault 0 <| Array.get 0 array
+            )
+    in
+    if Array.isEmpty array then
+        previousResult
+    else
+        performBitwiseXOR updatedArray result
+
+
+getDenseHash : Array Int -> Array Int
+getDenseHash sparseHashArray =
+    let
+        denseHashArray =
+            Array.fromList <|
+                List.indexedMap
+                    (\index item ->
+                        performBitwiseXOR (Array.slice (index * 16) ((index + 1) * 16) sparseHashArray) -1
+                    )
+                    (List.range 0 15)
+    in
+    denseHashArray
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    ""
+    let
+        inputArray =
+            Array.fromList <|
+                -- List.range 0 4
+                List.range 0 255
+
+        sequenceOfLengths =
+            List.map (Result.withDefault -1 << String.toInt) <|
+                String.split "," <|
+                    (getSecondPuzzleInput ++ "," ++ "17,31,73,47,23")
+
+        sparseHashArray =
+            getSparseHash inputArray sequenceOfLengths
+
+        denseHashArray =
+            getDenseHash sparseHashArray
+    in
+    -- toString <| List.length updatedSequenceOfLengths
+    toString denseHashArray
