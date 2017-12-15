@@ -69,7 +69,7 @@ getUpdatedArray inputArray selectionRanges =
             List.reverse <|
                 List.map
                     (\index ->
-                        Maybe.withDefault -1 <|
+                        Maybe.withDefault -100 <|
                             Array.get index inputArray
                     )
                     selectedIndexes
@@ -101,12 +101,15 @@ updateAllParameters inputArray currentPosition skipSize sequenceOfLengths select
     ( updatedCurrentPosition, updatedSkipSize, updatedSequenceOfLengths )
 
 
-applyKnotHash : Array Int -> Int -> Int -> List Int -> Array Int
+applyKnotHash : Array Int -> Int -> Int -> List Int -> ( Array Int, Int, Int )
 applyKnotHash inputArray currentPosition skipSize sequenceOfLengths =
     let
         selectedLength =
-            Maybe.withDefault -1 <|
+            Maybe.withDefault -10 <|
                 List.head sequenceOfLengths
+
+        _ =
+            Debug.log "sequenceOfLengths" sequenceOfLengths
 
         selectionRanges =
             if selectedLength > Array.length inputArray then
@@ -125,7 +128,7 @@ applyKnotHash inputArray currentPosition skipSize sequenceOfLengths =
             updateAllParameters inputArray currentPosition skipSize sequenceOfLengths selectedLength
     in
     if List.isEmpty sequenceOfLengths then
-        inputArray
+        ( inputArray, currentPosition, skipSize )
     else
         applyKnotHash updatedArray updatedCurrentPosition updatedSkipSize updatedSequenceOfLengths
 
@@ -166,29 +169,24 @@ getPuzzleAnswer =
 
 getSecondPuzzleInput : String
 getSecondPuzzleInput =
-    -- "106,118,236,1,130,0,235,254,59,205,2,87,129,25,255,118"
     "049,048,054,044,049,049,056,044,050,051,054,044,049,044,049,051,048,044,048,044,050,051,053,044,050,053,052,044,053,057,044,050,048,053,044,050,044,056,055,044,049,050,057,044,050,053,044,050,053,053,044,049,049,056"
 
 
-getSparseHash : Array Int -> List Int -> Array Int
-getSparseHash inputArray sequenceOfLengths =
+getSparseHash : Array Int -> Int -> Int -> List Int -> Array Int
+getSparseHash inputArray currentPosition skipSize sequenceOfLengths =
     let
-        updatedSequenceOfLengths =
-            List.foldl
-                (\_ r ->
-                    List.append r sequenceOfLengths
-                )
-                []
-                (List.range 0 63)
-
-        sparseHashArray =
-            applyKnotHash inputArray 0 0 updatedSequenceOfLengths
+        -- updatedSequenceOfLengths =
+        --     -- List.foldl
+        --     --     (\_ r ->
+        --     --         List.append r sequenceOfLengths
+        --     --     )
+        --     --     []
+        --     --     (List.range 0 63)
+        --     List.repeat 64 sequenceOfLengths
+        ( sparseHashArray, updatedCurrentPosition, updatedSkipSize ) =
+            applyKnotHash inputArray currentPosition skipSize sequenceOfLengths
     in
     sparseHashArray
-
-
-
--- Array.fromList []
 
 
 performBitwiseXOR : Array Int -> Int -> Int
@@ -212,7 +210,7 @@ getDenseHash sparseHashArray =
             Array.fromList <|
                 List.indexedMap
                     (\index item ->
-                        performBitwiseXOR (Array.slice (index * 16) ((index + 1) * 16) sparseHashArray) -1
+                        performBitwiseXOR (Array.slice (index * 16) ((index * 16) + 16) sparseHashArray) 0
                     )
                     (List.range 0 15)
     in
@@ -230,13 +228,24 @@ getPuzzleAnswer2 =
         sequenceOfLengths =
             List.map (Result.withDefault -1 << String.toInt) <|
                 String.split "," <|
+                    -- "17,31,73,47,23"
                     (getSecondPuzzleInput ++ "," ++ "17,31,73,47,23")
 
+        updatedSequenceOfLengths =
+            List.repeat 64 sequenceOfLengths
+
         sparseHashArray =
-            getSparseHash inputArray sequenceOfLengths
+            List.foldl
+                (\sequence r ->
+                    getSparseHash r 0 0 sequence
+                )
+                inputArray
+                updatedSequenceOfLengths
 
         denseHashArray =
             getDenseHash sparseHashArray
     in
     -- toString <| List.length updatedSequenceOfLengths
+    -- toString denseHashArray
+    -- "Needs review on the hex part of the question"
     toString denseHashArray

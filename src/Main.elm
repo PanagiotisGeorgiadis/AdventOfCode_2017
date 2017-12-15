@@ -1,6 +1,5 @@
 module Main exposing (..)
 
--- import Days.Day15 as Day15
 -- import Days.Day16 as Day16
 -- import Days.Day17 as Day17
 -- import Days.Day18 as Day18
@@ -18,6 +17,7 @@ import Days.Day11 as Day11
 import Days.Day12 as Day12
 import Days.Day13 as Day13
 import Days.Day14 as Day14
+import Days.Day15 as Day15
 import Days.Day2 as Day2
 import Days.Day3b as Day3
 import Days.Day4 as Day4
@@ -92,6 +92,8 @@ view model =
         , dayResultHtml "Day 13b: " "done" Day13.getPuzzleAnswer2
         , dayResultHtml "Day 14a: " "in-progress" Day14.getPuzzleAnswer
         , dayResultHtml "Day 14b: " "in-progress" Day14.getPuzzleAnswer2
+        , dayResultHtml "Day 15a: " "in-progress" Day15.getPuzzleAnswer
+        , dayResultHtml "Day 15b: " "in-progress" Day15.getPuzzleAnswer2
         ]
 
 
