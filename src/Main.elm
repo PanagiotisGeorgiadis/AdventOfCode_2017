@@ -83,7 +83,7 @@ view model =
         , dayResultHtml "Day 9a: " "done" Day9.getPuzzleAnswer
         , dayResultHtml "Day 9b: " "done" Day9.getPuzzleAnswer2
         , dayResultHtml "Day 10a: " "done" Day10.getPuzzleAnswer
-        , dayResultHtml "Day 10b: " "in-progress" Day10.getPuzzleAnswer2
+        , dayResultHtml "Day 10b: " "done" Day10.getPuzzleAnswer2
         , dayResultHtml "Day 11a: " "done" Day11.getPuzzleAnswer
         , dayResultHtml "Day 11b: " "done" Day11.getPuzzleAnswer2
         , dayResultHtml "Day 12a: " "done" Day12.getPuzzleAnswer
