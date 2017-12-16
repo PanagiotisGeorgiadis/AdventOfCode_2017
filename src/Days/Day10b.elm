@@ -3,6 +3,7 @@ module Days.Day10b exposing (getPuzzleAnswer, getPuzzleAnswer2)
 import Array exposing (..)
 import Bitwise as Bitwise
 import Common exposing (..)
+import Helpers.Ascii exposing (..)
 
 
 getPuzzleInput : String
@@ -181,11 +182,6 @@ getPuzzleAnswer =
     "6909"
 
 
-getSecondPuzzleInput : String
-getSecondPuzzleInput =
-    "49,48,54,44,49,49,56,44,50,51,54,44,49,44,49,51,48,44,48,44,50,51,53,44,50,53,52,44,53,57,44,50,48,53,44,50,44,56,55,44,49,50,57,44,50,53,44,50,53,53,44,49,49,56"
-
-
 performBitwiseXOR : Array Int -> Int -> Int
 performBitwiseXOR array previousResult =
     let
@@ -222,6 +218,14 @@ getDenseHash sparseHashArray =
 --             Array.fromList <|
 --                 List.range 0 255
 --
+--         asciiList =
+--             String.foldl
+--                 (\c r ->
+--                     r ++ getAsciiFromChar c ++ ","
+--                 )
+--                 ""
+--                 getPuzzleInput
+--
 --         sequenceOfLengths =
 --             List.map (Result.withDefault -1 << String.toInt) <|
 --                 String.split "," <|
@@ -233,7 +237,7 @@ getDenseHash sparseHashArray =
 --                     -- "49,44,50,44,51,17,31,73,47,23"
 --                     -- 1,2,4 example.
 --                     -- "49,44,50,44,52,17,31,73,47,23"
---                     (getSecondPuzzleInput ++ "," ++ "17,31,73,47,23")
+--                     (asciiList ++ "17,31,73,47,23")
 --
 --         updatedSequenceOfLengths =
 --             List.repeat 64 sequenceOfLengths
