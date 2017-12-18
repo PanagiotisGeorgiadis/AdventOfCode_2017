@@ -95,39 +95,64 @@ getValueAfterTargetValue currentValue targetValue circularBuffer =
         getValueAfterTargetValue updatedCurrentValue targetValue updatedCircularBuffer
 
 
-getPuzzleAnswer : String
-getPuzzleAnswer =
-    let
-        circularBuffer =
-            -- constructCircularBuffer (List.range 0 2017) 0 []
-            constructCircularBuffer 0 2017 0 []
-
-        targetValue =
-            getValueAfterTargetValue 0 2017 circularBuffer
-    in
-    toString targetValue
-
-
 
 -- getPuzzleAnswer : String
 -- getPuzzleAnswer =
---     "640"
+--     let
+--         circularBuffer =
+--             constructCircularBuffer 0 2017 0 []
+--
+--         targetValue =
+--             getValueAfterTargetValue 0 2017 circularBuffer
+--     in
+--     toString targetValue
+
+
+getPuzzleAnswer : String
+getPuzzleAnswer =
+    "640"
+
+
+constructFiftyMillionCircularBuffer : Int -> Int -> Int -> Int
+constructFiftyMillionCircularBuffer targetNumber currentPosition arrayLength =
+    let
+        steps =
+            getPuzzleInput
+
+        updatedCurrentPosition =
+            if arrayLength == 0 then
+                0
+            else if currentPosition + steps >= arrayLength then
+                (currentPosition + steps) % arrayLength
+            else
+                currentPosition + steps
+
+        updatedArrayLength =
+            arrayLength + 1
+
+        updatedTargetNumber =
+            if currentPosition == 1 then
+                arrayLength
+            else
+                targetNumber
+    in
+    if arrayLength > 50000000 then
+        -- The -1 here works because we are calculating arrayLength and not the value.
+        targetNumber - 1
+    else
+        constructFiftyMillionCircularBuffer updatedTargetNumber (updatedCurrentPosition + 1) updatedArrayLength
+
+
+
 -- getPuzzleAnswer2 : String
 -- getPuzzleAnswer2 =
 --     let
---         circularBuffer =
---             constructCircularBuffer 0 50000000 0 []
---
---         _ =
---             Debug.log "circularBuffer" circularBuffer
---
---         -- targetValue =
---         -- getValueAfterTargetValue 0 0 circularBuffer
+--         targetValue =
+--             constructFiftyMillionCircularBuffer 0 0 0
 --     in
---     -- toString targetValue
---     ""
+--     toString targetValue
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    "Try with array."
+    "47949463"
