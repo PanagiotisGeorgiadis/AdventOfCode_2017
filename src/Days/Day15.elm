@@ -40,14 +40,17 @@ updateBinaryResults newValue results =
     Array.push (String.slice 0 16 <| String.reverse <| convertToBinary "" newValue) results
 
 
-getUpdatedValues : Int -> ( Int, Int ) -> ( Array String, Array String ) -> ( Int, ( Int, Int ), ( Array String, Array String ) )
+
+-- getUpdatedValues : Int -> ( Int, Int ) -> ( Array String, Array String ) -> ( Int, ( Int, Int ), ( Array String, Array String ) )
+
+
 getUpdatedValues index ( prevA, prevB ) ( prevResultsA, prevResultsB ) =
     let
         factorA =
-            getGeneratorFactorA
+            16807
 
         factorB =
-            getGeneratorFactorB
+            48271
 
         updatedIndex =
             index + 1
@@ -63,8 +66,11 @@ getUpdatedValues index ( prevA, prevB ) ( prevResultsA, prevResultsB ) =
             )
 
         updatedResults =
-            ( updateBinaryResults updatedA prevResultsA
-            , updateBinaryResults updatedB prevResultsB
+            -- ( updateBinaryResults updatedA prevResultsA
+            -- , updateBinaryResults updatedB prevResultsB
+            -- )
+            ( Array.push updatedA prevResultsA
+            , Array.push updatedB prevResultsB
             )
 
         -- Array.push updatedValue results
@@ -72,7 +78,10 @@ getUpdatedValues index ( prevA, prevB ) ( prevResultsA, prevResultsB ) =
     ( updatedIndex, ( updatedA, updatedB ), updatedResults )
 
 
-getGeneratorValues : Int -> ( Int, Int ) -> ( Array String, Array String ) -> ( Array String, Array String )
+
+-- getGeneratorValues : Int -> ( Int, Int ) -> ( Array String, Array String ) -> ( Array String, Array String )
+
+
 getGeneratorValues index ( prevA, prevB ) results =
     let
         -- updatedIndex =
@@ -127,64 +136,73 @@ countCorrectPairs outputA outputB =
                 (Array.toList outputB)
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         ( startA, startB ) =
+--             getPuzzleInput
+--
+--         ( resultsA, resultsB ) =
+--             -- Array.map (convertToBinary "") <|
+--             getGeneratorValues 0 ( startA, startB ) ( Array.fromList [], Array.fromList [] )
+--
+--         -- ( [], [] )
+--         -- generatorBValues =
+--         -- Array.map (convertToBinary "") <|
+--         -- getGeneratorValues 0 generatorBFactor startingValueB (Array.fromList [])
+--         -- Array.foldl
+--         --     (\_ r ->
+--         --         getGeneratorValues 4000 generatorBFactor startingValueB r
+--         --     )
+--         --     (Array.fromList [])
+--         --     (Array.repeat 0 10000)
+--         -- exampleGeneratorAValues =
+--         --     Array.map (convertToBinary "") <|
+--         --         getGeneratorValues 5 generatorAFactor 65 (Array.fromList [])
+--         --
+--         -- exampleGeneratorBValues =
+--         --     Array.map (convertToBinary "") <|
+--         --         getGeneratorValues 5 generatorBFactor 8921 (Array.fromList [])
+--         -- correctPairs =
+--         --     List.length <|
+--         --         List.filter identity <|
+--         --             List.map2
+--         --                 (\a b ->
+--         --                     let
+--         --                         lsbA =
+--         --                             String.slice 0 16 <|
+--         --                                 String.reverse a
+--         --
+--         --                         lsbB =
+--         --                             String.slice 0 16 <|
+--         --                                 String.reverse b
+--         --                     in
+--         --                     if lsbA == lsbB then
+--         --                         True
+--         --                     else
+--         --                         False
+--         --                 )
+--         --                 -- (Array.toList exampleGeneratorAValues)
+--         --                 -- (Array.toList exampleGeneratorBValues)
+--         --                 (Array.toList generatorAValues)
+--         --                 (Array.toList generatorBValues)
+--         correctPairs =
+--             -- countCorrectPairs generatorAValues generatorBValues
+--             -- countCorrectPairs resultsA resultsB
+--             0
+--
+--         _ =
+--             Debug.log "resultsA" <| resultsA
+--     in
+--     -- toString exampleGeneratorAValues ++ " /////////// " ++ toString exampleGeneratorBValues
+--     -- toString <| Array.length generatorAValues
+--     toString correctPairs
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        ( startA, startB ) =
-            getPuzzleInput
-
-        ( resultsA, resultsB ) =
-            -- Array.map (convertToBinary "") <|
-            -- getGeneratorValues 0 ( startA, startB ) ( Array.fromList [], Array.fromList [] )
-            ( [], [] )
-
-        -- generatorBValues =
-        -- Array.map (convertToBinary "") <|
-        -- getGeneratorValues 0 generatorBFactor startingValueB (Array.fromList [])
-        -- Array.foldl
-        --     (\_ r ->
-        --         getGeneratorValues 4000 generatorBFactor startingValueB r
-        --     )
-        --     (Array.fromList [])
-        --     (Array.repeat 0 10000)
-        -- exampleGeneratorAValues =
-        --     Array.map (convertToBinary "") <|
-        --         getGeneratorValues 5 generatorAFactor 65 (Array.fromList [])
-        --
-        -- exampleGeneratorBValues =
-        --     Array.map (convertToBinary "") <|
-        --         getGeneratorValues 5 generatorBFactor 8921 (Array.fromList [])
-        -- correctPairs =
-        --     List.length <|
-        --         List.filter identity <|
-        --             List.map2
-        --                 (\a b ->
-        --                     let
-        --                         lsbA =
-        --                             String.slice 0 16 <|
-        --                                 String.reverse a
-        --
-        --                         lsbB =
-        --                             String.slice 0 16 <|
-        --                                 String.reverse b
-        --                     in
-        --                     if lsbA == lsbB then
-        --                         True
-        --                     else
-        --                         False
-        --                 )
-        --                 -- (Array.toList exampleGeneratorAValues)
-        --                 -- (Array.toList exampleGeneratorBValues)
-        --                 (Array.toList generatorAValues)
-        --                 (Array.toList generatorBValues)
-        correctPairs =
-            -- countCorrectPairs generatorAValues generatorBValues
-            -- countCorrectPairs resultsA resultsB
-            0
-    in
-    -- toString exampleGeneratorAValues ++ " /////////// " ++ toString exampleGeneratorBValues
-    -- toString <| Array.length generatorAValues
-    toString correctPairs
+    ""
 
 
 getPuzzleAnswer2 : String

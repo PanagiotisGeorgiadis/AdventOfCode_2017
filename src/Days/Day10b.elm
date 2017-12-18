@@ -1,4 +1,4 @@
-module Days.Day10b exposing (getPuzzleAnswer, getPuzzleAnswer2)
+module Days.Day10b exposing (applyKnotHash, getDenseHash, getPuzzleAnswer, getPuzzleAnswer2)
 
 import Array exposing (..)
 import Bitwise as Bitwise
