@@ -144,8 +144,8 @@ getPuzzleInput =
     "set i 31\n    set a 1\n    mul p 17\n    jgz p p\n    mul a 2\n    add i -1\n    jgz i -2\n    add a -1\n    set i 127\n    set p 735\n    mul p 8505\n    mod p a\n    mul p 129749\n    add p 12345\n    mod p a\n    set b p\n    mod b 10000\n    snd b\n    add i -1\n    jgz i -9\n    jgz a 3\n    rcv b\n    jgz b -1\n    set f 0\n    set i 126\n    rcv a\n    rcv b\n    set p a\n    mul p -1\n    add p b\n    jgz p 4\n    snd a\n    set a b\n    jgz 1 3\n    snd b\n    set f 1\n    add i -1\n    jgz i -11\n    snd a\n    jgz f -16\n    jgz a -19"
 
 
-getRegister : Char -> List Register -> Register
-getRegister name registers =
+getRegisterByName : Char -> List Register -> Register
+getRegisterByName name registers =
     let
         updatedRegisters =
             List.drop 1 registers
@@ -159,14 +159,30 @@ getRegister name registers =
     else if List.isEmpty registers then
         nonValidRegister
     else
-        getRegister name updatedRegisters
+        getRegisterByName name updatedRegisters
 
 
-executeSetInstruction : Int -> Char -> List Register -> List Register
-executeSetInstruction newValue name registers =
+executeSetValueInstruction : Int -> Char -> List Register -> List Register
+executeSetValueInstruction valueY name registers =
     List.map
         (\register ->
             if register.name == name then
+                { register | value = valueY }
+            else
+                register
+        )
+        registers
+
+
+executeIncreaseValueInstruction : Int -> Char -> List Register -> List Register
+executeIncreaseValueInstruction valueY name registers =
+    List.map
+        (\register ->
+            if register.name == name then
+                let
+                    newValue =
+                        register.value + valueY
+                in
                 { register | value = newValue }
             else
                 register
@@ -174,32 +190,16 @@ executeSetInstruction newValue name registers =
         registers
 
 
-executeIncreaseInstruction : Int -> Char -> List Register -> List Register
-executeIncreaseInstruction newValue name registers =
+executeMultiplyValueInstruction : Int -> Char -> List Register -> List Register
+executeMultiplyValueInstruction valueY name registers =
     List.map
         (\register ->
             if register.name == name then
                 let
-                    prevValue =
-                        register.value
+                    newValue =
+                        register.value * valueY
                 in
-                { register | value = prevValue + newValue }
-            else
-                register
-        )
-        registers
-
-
-executeMultiplyInstruction : Int -> Char -> List Register -> List Register
-executeMultiplyInstruction newValue name registers =
-    List.map
-        (\register ->
-            if register.name == name then
-                let
-                    prevValue =
-                        register.value
-                in
-                { register | value = prevValue * newValue }
+                { register | value = newValue }
             else
                 register
         )
@@ -207,48 +207,43 @@ executeMultiplyInstruction newValue name registers =
 
 
 executeModulusInstruction : Int -> Char -> List Register -> List Register
-executeModulusInstruction newValue name registers =
-    if newValue == 0 then
+executeModulusInstruction valueY name registers =
+    if valueY == 0 then
         registers
     else
         List.map
             (\register ->
                 if register.name == name then
                     let
-                        prevValue =
-                            register.value
+                        newValue =
+                            register.value % valueY
                     in
-                    { register | value = prevValue % newValue }
+                    { register | value = newValue }
                 else
                     register
             )
             registers
 
 
-shouldRecoverSound : Int -> Char -> List Register -> Bool
-shouldRecoverSound newValue name registers =
-    List.foldl
-        (\register r ->
-            if register.name == name && register.value > 0 then
-                True
-            else
-                r
-        )
-        False
-        registers
+executeRecoverSoundInstruction : Char -> List Register -> Bool
+executeRecoverSoundInstruction name registers =
+    let
+        targetRegister =
+            getRegisterByName name registers
+    in
+    targetRegister.value > 0
 
 
 executeJumpInstruction : Int -> Char -> List Register -> Int
-executeJumpInstruction newValue name registers =
-    List.foldl
-        (\register r ->
-            if register.name == name && register.value > 0 && newValue /= 0 then
-                newValue
-            else
-                1
-        )
+executeJumpInstruction valueY name registers =
+    let
+        targetRegister =
+            getRegisterByName name registers
+    in
+    if targetRegister.value > 0 && valueY /= 0 then
+        valueY
+    else
         1
-        registers
 
 
 executeInstuctions : Int -> List Register -> Array Instruction -> Int -> Int
@@ -264,7 +259,7 @@ executeInstuctions index registers instructions soundPlayed =
         targetValue =
             case sourceRegister of
                 Just reg ->
-                    .value <| getRegister reg registers
+                    .value <| getRegisterByName reg registers
 
                 Nothing ->
                     value
@@ -274,26 +269,26 @@ executeInstuctions index registers instructions soundPlayed =
                 PlaySound ->
                     ( registers
                     , index + 1
-                    , .value <| getRegister register registers
+                    , .value <| getRegisterByName register registers
                     , False
                     )
 
                 SetRegisterValue ->
-                    ( executeSetInstruction targetValue register registers
+                    ( executeSetValueInstruction targetValue register registers
                     , index + 1
                     , soundPlayed
                     , False
                     )
 
                 AddToRegisterValue ->
-                    ( executeIncreaseInstruction targetValue register registers
+                    ( executeIncreaseValueInstruction targetValue register registers
                     , index + 1
                     , soundPlayed
                     , False
                     )
 
                 MultiplyRegisterValue ->
-                    ( executeMultiplyInstruction targetValue register registers
+                    ( executeMultiplyValueInstruction targetValue register registers
                     , index + 1
                     , soundPlayed
                     , False
@@ -310,7 +305,7 @@ executeInstuctions index registers instructions soundPlayed =
                     ( registers
                     , index + 1
                     , soundPlayed
-                    , shouldRecoverSound targetValue register registers
+                    , executeRecoverSoundInstruction register registers
                     )
 
                 Jump ->
@@ -330,12 +325,6 @@ executeInstuctions index registers instructions soundPlayed =
                     , soundPlayed
                     , True
                     )
-
-        _ =
-            Debug.log "soundPlayed" soundPlayed
-
-        _ =
-            Debug.log "updatedRegisters" updatedRegisters
     in
     if didRecoverSound then
         soundPlayed
@@ -343,31 +332,31 @@ executeInstuctions index registers instructions soundPlayed =
         executeInstuctions updatedIndex updatedRegisters instructions updatedSoundPlayed
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         exampleInput =
+--             "set a 1\nadd a 2\nmul a a\nmod a 5\nsnd a\nset a 0\nrcv a\njgz a -1\nset a 1\njgz a -2"
+--
+--         instructions =
+--             Array.fromList <|
+--                 List.map (transformToInstruction << String.trim) <|
+--                     -- String.lines exampleInput
+--                     String.lines getPuzzleInput
+--
+--         registers =
+--             getInitialRegisters
+--
+--         lastSoundPlayed =
+--             executeInstuctions 0 registers instructions 0
+--     in
+--     toString lastSoundPlayed
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        exampleInput =
-            "set a 1\nadd a 2\nmul a a\nmod a 5\nsnd a\nset a 0\nrcv a\njgz a -1\nset a 1\njgz a -2"
-
-        instructions =
-            Array.fromList <|
-                List.map (transformToInstruction << String.trim) <|
-                    -- String.lines exampleInput
-                    String.lines getPuzzleInput
-
-        registers =
-            getInitialRegisters
-
-        _ =
-            Debug.log "instructions Length" <| Array.length instructions
-
-        _ =
-            Debug.log "instructions" instructions
-
-        _ =
-            Debug.log "registers" registers
-    in
-    toString <| executeInstuctions 0 registers instructions 0
+    "8600"
 
 
 getPuzzleAnswer2 : String
