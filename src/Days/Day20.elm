@@ -118,7 +118,7 @@ getMinimumPositionParticle targetParticle targetIndex closestParticle closestPar
         closestPosition =
             Triplet.getAbsoluteMaximum closestParticle.position
     in
-    if targetPosition <= closestPosition then
+    if targetPosition < closestPosition then
         ( targetParticle, targetIndex )
     else
         ( closestParticle, closestParticleIndex )
@@ -151,7 +151,7 @@ getMinimumAccelerationParticle targetParticle targetIndex closestParticle closes
             Triplet.getAbsoluteMaximum closestParticle.acceleration
     in
     if targetAcceleration < closestAcceleration then
-        ( targetParticle, Triplet.getAbsoluteMaximum targetParticle.acceleration )
+        ( targetParticle, targetIndex )
     else if targetAcceleration == closestAcceleration then
         getMinimumVelocityParticle targetParticle targetIndex closestParticle closestParticleIndex
     else
@@ -171,13 +171,13 @@ getLongTermManhatanDistance index particles closestParticle closestParticleIndex
         updatedIndex =
             index + 1
 
-        ( updatedClosestParticle, updatedclosestParticleIndex ) =
-            getMinimumAccelerationParticle selectedParticle updatedIndex closestParticle closestParticleIndex
+        ( updatedClosestParticle, updatedClosestParticleIndex ) =
+            getMinimumAccelerationParticle selectedParticle index closestParticle closestParticleIndex
     in
     if List.isEmpty particles then
-        ( closestParticle, index )
+        ( closestParticle, closestParticleIndex )
     else
-        getLongTermManhatanDistance updatedIndex updatedParticles updatedClosestParticle updatedclosestParticleIndex
+        getLongTermManhatanDistance updatedIndex updatedParticles updatedClosestParticle updatedClosestParticleIndex
 
 
 getPuzzleAnswer : String
@@ -189,12 +189,6 @@ getPuzzleAnswer =
 
         ( closestParticle, closestParticleIndex ) =
             getLongTermManhatanDistance 0 particles nonValidParticle -1
-
-        _ =
-            Debug.log "closestParticle" closestParticle
-
-        _ =
-            Debug.log "closestParticleIndex" closestParticleIndex
     in
     toString closestParticleIndex
 
