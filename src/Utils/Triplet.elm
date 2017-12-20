@@ -1,22 +1,44 @@
-module Utils.Triplet exposing (first, second, third)
+module Utils.Triplet exposing (..)
 
 
-first : ( Int, Int, Int ) -> Int
+type alias Triplet =
+    ( Int, Int, Int )
+
+
+first : Triplet -> Int
 first triplet =
     case triplet of
         ( a, b, c ) ->
             a
 
 
-second : ( Int, Int, Int ) -> Int
+second : Triplet -> Int
 second triplet =
     case triplet of
         ( a, b, c ) ->
             b
 
 
-third : ( Int, Int, Int ) -> Int
+third : Triplet -> Int
 third triplet =
     case triplet of
         ( a, b, c ) ->
             c
+
+
+getTripletFromList : List Int -> Maybe Triplet
+getTripletFromList list =
+    case list of
+        a :: b :: c :: _ ->
+            Just ( a, b, c )
+
+        _ ->
+            Nothing
+
+
+getAbsoluteMaximum : Triplet -> Int
+getAbsoluteMaximum triplet =
+    case triplet of
+        ( a, b, c ) ->
+            max (abs c) <|
+                max (abs a) (abs b)
