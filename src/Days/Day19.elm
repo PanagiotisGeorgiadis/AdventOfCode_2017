@@ -358,45 +358,54 @@ gatherLettersFromRoute puzzleRows prevIndexes prevDirection letters steps =
         gatherLettersFromRoute puzzleRows updatedIndexes updatedDirection updatedLetters updatedSteps
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         puzzleRows =
+--             Array.map (String.padRight 201 ' ') <|
+--                 Array.filter (not << String.isEmpty) <|
+--                     Array.fromList <|
+--                         String.lines getPuzzleInput
+--
+--         firstRow =
+--             Maybe.withDefault "" <|
+--                 Array.get 0 puzzleRows
+--
+--         startingIndex =
+--             getIndexOfFirstInstruction 0 firstRow
+--
+--         ( letters, _ ) =
+--             gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList []) 0
+--     in
+--     String.fromList (Array.toList letters)
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         puzzleRows =
+--             Array.map (String.padRight 201 ' ') <|
+--                 Array.filter (not << String.isEmpty) <|
+--                     Array.fromList <|
+--                         String.lines getPuzzleInput
+--
+--         firstRow =
+--             Maybe.withDefault "" <|
+--                 Array.get 0 puzzleRows
+--
+--         startingIndex =
+--             getIndexOfFirstInstruction 0 firstRow
+--
+--         ( _, steps ) =
+--             gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList []) 0
+--     in
+--     toString steps
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        puzzleRows =
-            Array.map (String.padRight 201 ' ') <|
-                Array.filter (not << String.isEmpty) <|
-                    Array.fromList <|
-                        String.lines getPuzzleInput
-
-        firstRow =
-            Maybe.withDefault "" <|
-                Array.get 0 puzzleRows
-
-        startingIndex =
-            getIndexOfFirstInstruction 0 firstRow
-
-        ( letters, _ ) =
-            gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList []) 0
-    in
-    String.fromList (Array.toList letters)
+    "GPALMJSOY"
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    let
-        puzzleRows =
-            Array.map (String.padRight 201 ' ') <|
-                Array.filter (not << String.isEmpty) <|
-                    Array.fromList <|
-                        String.lines getPuzzleInput
-
-        firstRow =
-            Maybe.withDefault "" <|
-                Array.get 0 puzzleRows
-
-        startingIndex =
-            getIndexOfFirstInstruction 0 firstRow
-
-        ( _, steps ) =
-            gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList []) 0
-    in
-    toString steps
+    "16204"
