@@ -298,9 +298,12 @@ resolveCrossRoad ( rowIndex, columnIndex ) direction puzzleRows letters =
             leftAndRightTuple
 
 
-gatherLettersFromRoute : Array String -> ( Int, Int ) -> Direction -> Array Char -> Array Char
-gatherLettersFromRoute puzzleRows prevIndexes prevDirection letters =
+gatherLettersFromRoute : Array String -> ( Int, Int ) -> Direction -> Array Char -> Int -> ( Array Char, Int )
+gatherLettersFromRoute puzzleRows prevIndexes prevDirection letters steps =
     let
+        updatedSteps =
+            steps + 1
+
         ( prevRow, prevColumn ) =
             prevIndexes
 
@@ -350,9 +353,9 @@ gatherLettersFromRoute puzzleRows prevIndexes prevDirection letters =
                         ( ( prevRow, prevColumn + 1 ), Right, Array.push previousSelectedCharacter letters )
     in
     if previousSelectedCharacter == ' ' || prevRow < 0 || prevRow > Array.length puzzleRows || prevColumn < 0 || prevColumn > 201 then
-        letters
+        ( letters, steps )
     else
-        gatherLettersFromRoute puzzleRows updatedIndexes updatedDirection updatedLetters
+        gatherLettersFromRoute puzzleRows updatedIndexes updatedDirection updatedLetters updatedSteps
 
 
 getPuzzleAnswer : String
@@ -364,37 +367,36 @@ getPuzzleAnswer =
                     Array.fromList <|
                         String.lines getPuzzleInput
 
-        exampleInput =
-            """
-     |
-     |  +--+
-     A  |  C
- F---|----E|--+
-     |  |  |  D
-     +B-+  +--+
-            """
-
-        examplePuzzleRows =
-            Array.map (String.padRight 16 ' ') <|
-                Array.filter (not << String.isEmpty) <|
-                    Array.fromList <|
-                        String.lines exampleInput
-
         firstRow =
             Maybe.withDefault "" <|
-                -- Array.get 0 examplePuzzleRows
                 Array.get 0 puzzleRows
 
         startingIndex =
             getIndexOfFirstInstruction 0 firstRow
 
-        letters =
-            -- gatherLettersFromRoute examplePuzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList [])
-            gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList [])
+        ( letters, _ ) =
+            gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList []) 0
     in
     String.fromList (Array.toList letters)
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    ""
+    let
+        puzzleRows =
+            Array.map (String.padRight 201 ' ') <|
+                Array.filter (not << String.isEmpty) <|
+                    Array.fromList <|
+                        String.lines getPuzzleInput
+
+        firstRow =
+            Maybe.withDefault "" <|
+                Array.get 0 puzzleRows
+
+        startingIndex =
+            getIndexOfFirstInstruction 0 firstRow
+
+        ( _, steps ) =
+            gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList []) 0
+    in
+    toString steps
