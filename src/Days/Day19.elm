@@ -349,7 +349,7 @@ gatherLettersFromRoute puzzleRows prevIndexes prevDirection letters =
                     else
                         ( ( prevRow, prevColumn + 1 ), Right, Array.push previousSelectedCharacter letters )
     in
-    if prevRow < 0 || prevRow > Array.length puzzleRows || prevColumn < 0 || prevColumn > 201 then
+    if previousSelectedCharacter == ' ' || prevRow < 0 || prevRow > Array.length puzzleRows || prevColumn < 0 || prevColumn > 201 then
         letters
     else
         gatherLettersFromRoute puzzleRows updatedIndexes updatedDirection updatedLetters
@@ -390,10 +390,9 @@ getPuzzleAnswer =
 
         letters =
             -- gatherLettersFromRoute examplePuzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList [])
-            -- gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList [])
-            []
+            gatherLettersFromRoute puzzleRows ( 0, startingIndex + 1 ) Down (Array.fromList [])
     in
-    toString letters
+    String.fromList (Array.toList letters)
 
 
 getPuzzleAnswer2 : String
