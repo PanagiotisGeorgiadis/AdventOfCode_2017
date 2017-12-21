@@ -1,5 +1,6 @@
 module Days.Day20 exposing (..)
 
+import Array exposing (..)
 import Utils.Triplet as Triplet exposing (Triplet)
 
 
@@ -27,20 +28,32 @@ nonValidParticle =
     Particle ( 10000, 10000, 10000 ) ( 10000, 10000, 10000 ) ( 10000, 10000, 10000 )
 
 
-increaseVelocity : Acceleration -> Velocity -> Velocity
-increaseVelocity acceleration velocity =
-    ( Triplet.first acceleration + Triplet.first velocity
-    , Triplet.second acceleration + Triplet.second velocity
-    , Triplet.third acceleration + Triplet.third velocity
-    )
+updateParticleVelocity : Particle -> Particle
+updateParticleVelocity particle =
+    let
+        updatedVelocity =
+            ( Triplet.first particle.velocity + Triplet.first particle.acceleration
+            , Triplet.second particle.velocity + Triplet.second particle.acceleration
+            , Triplet.third particle.velocity + Triplet.third particle.acceleration
+            )
+    in
+    { particle
+        | velocity = updatedVelocity
+    }
 
 
-increasePosition : Velocity -> Position -> Position
-increasePosition velocity position =
-    ( Triplet.first velocity + Triplet.first position
-    , Triplet.second velocity + Triplet.second position
-    , Triplet.third velocity + Triplet.third position
-    )
+updateParticlePosition : Particle -> Particle
+updateParticlePosition particle =
+    let
+        updatedPosition =
+            ( Triplet.first particle.position + Triplet.first particle.velocity
+            , Triplet.second particle.position + Triplet.second particle.velocity
+            , Triplet.third particle.position + Triplet.third particle.velocity
+            )
+    in
+    { particle
+        | position = updatedPosition
+    }
 
 
 getTripletFromDataString : String -> Triplet
@@ -72,8 +85,8 @@ getTripletFromDataString dataString =
     ( first, second, third )
 
 
-getParticleFromInput : String -> Particle
-getParticleFromInput row =
+transformRowToParticle : String -> Particle
+transformRowToParticle row =
     let
         position =
             getTripletFromDataString <|
@@ -180,19 +193,94 @@ getLongTermManhatanDistance index particles closestParticle closestParticleIndex
         getLongTermManhatanDistance updatedIndex updatedParticles updatedClosestParticle updatedClosestParticleIndex
 
 
+
+-- getPuzzleAnswer : String
+-- getPuzzleAnswer =
+--     let
+--         particles =
+--             List.map transformRowToParticle <|
+--                 String.lines getPuzzleInput
+--
+--         ( closestParticle, closestParticleIndex ) =
+--             getLongTermManhatanDistance 0 particles nonValidParticle -1
+--     in
+--     toString closestParticleIndex
+
+
 getPuzzleAnswer : String
 getPuzzleAnswer =
-    let
-        particles =
-            List.map getParticleFromInput <|
-                String.lines getPuzzleInput
+    "364"
 
-        ( closestParticle, closestParticleIndex ) =
-            getLongTermManhatanDistance 0 particles nonValidParticle -1
+
+didColide : Particle -> Particle -> Bool
+didColide firstParticle secondParticle =
+    (firstParticle /= secondParticle)
+        && (Triplet.first firstParticle.position == Triplet.first secondParticle.position)
+        && (Triplet.second firstParticle.position == Triplet.second secondParticle.position)
+        && (Triplet.third firstParticle.position == Triplet.third secondParticle.position)
+
+
+removeCollidedParticles : Particle -> Array Particle -> Array Particle
+removeCollidedParticles targetParticle particles =
+    Array.filter
+        (not << didColide targetParticle)
+        particles
+
+
+simulateTick : Int -> Array Particle -> Array Particle
+simulateTick index particles =
+    let
+        newValue =
+            updateParticlePosition <|
+                updateParticleVelocity <|
+                    Maybe.withDefault nonValidParticle <|
+                        Array.get index particles
+
+        updatedParticles =
+            Array.set index newValue particles
+
+        updatedIndex =
+            index + 1
     in
-    toString closestParticleIndex
+    if index == Array.length particles then
+        particles
+    else
+        simulateTick updatedIndex updatedParticles
+
+
+runParticleSimulation : Int -> Array Particle -> Array Particle
+runParticleSimulation index particles =
+    let
+        updatedParticles =
+            simulateTick 0 particles
+
+        remainingParticles =
+            Array.foldl
+                removeCollidedParticles
+                updatedParticles
+                updatedParticles
+    in
+    if index == 1000 then
+        particles
+    else
+        runParticleSimulation (index + 1) remainingParticles
+
+
+
+-- getPuzzleAnswer2 : String
+-- getPuzzleAnswer2 =
+--     let
+--         particles =
+--             Array.fromList <|
+--                 List.map transformRowToParticle <|
+--                     String.lines getPuzzleInput
+--
+--         updatedParticles =
+--             runParticleSimulation 0 particles
+--     in
+--     toString <| Array.length updatedParticles
 
 
 getPuzzleAnswer2 : String
 getPuzzleAnswer2 =
-    ""
+    "420"
