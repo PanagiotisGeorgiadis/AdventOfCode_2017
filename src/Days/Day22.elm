@@ -201,7 +201,8 @@ toggleNodeStateInPosition ( rowIndex, columnIndex ) matrix =
                     Cleaned
 
                 NoState ->
-                    Debug.crash <| toString rowIndex
+                    -- Debug.crash <| toString rowIndex
+                    nodeState
 
         -- nodeState
         updatedRow =
@@ -232,14 +233,14 @@ moveVirusCarrier index matrix currentPosition direction infectionsCount =
                 _ ->
                     infectionsCount
 
-        _ =
-            Debug.log "determineDirection" <| determineDirection (getNodeStateFromPosition currentPosition matrix) direction
-
-        _ =
-            Debug.log "getNodeStateFromPosition" <| getNodeStateFromPosition currentPosition matrix
-
-        _ =
-            Debug.log "getUpdatedPosition" <| getUpdatedPosition currentPosition direction
+        -- _ =
+        --     Debug.log "determineDirection" <| determineDirection (getNodeStateFromPosition currentPosition matrix) direction
+        --
+        -- _ =
+        --     Debug.log "getNodeStateFromPosition" <| getNodeStateFromPosition currentPosition matrix
+        --
+        -- _ =
+        --     Debug.log "getUpdatedPosition" <| getUpdatedPosition currentPosition direction
     in
     if index > 50 then
         infectionsCount
@@ -309,40 +310,27 @@ getPuzzleAnswer =
 .........
 """
 
-        rows =
-            Array.fromList <|
-                List.filter (not << String.isEmpty) <|
-                    String.lines exampleInput
-
-        startingPosition =
-            getCenterPointPosition rows
-
-        transformedRows =
-            Array.map
-                (transformToStateFullNodes (Array.fromList []))
-                rows
-
-        infectedIndexes =
-            moveVirusCarrier 0 transformedRows startingPosition Up 0
-
+        -- rows =
+        --     Array.fromList <|
+        --         List.filter (not << String.isEmpty) <|
+        --             String.lines exampleInput
+        --
+        -- startingPosition =
+        --     getCenterPointPosition rows
+        --
+        -- transformedRows =
+        --     Array.map
+        --         (transformToStateFullNodes (Array.fromList []))
+        --         rows
+        --
+        -- infectedIndexes =
+        --     moveVirusCarrier 0 transformedRows startingPosition Up 0
+        --
         -- _ =
         --     Debug.log "startingPosition" startingPosition
-        --
-        -- _ =
-        --     Debug.log "transformedRows" <| Array.get 0 transformedRows
-        --
-        -- _ =
-        --     Debug.log "puzzleRows Length" <| Array.length puzzleRows
-        --
-        -- _ =
-        --     Debug.log "line length" <| String.length <| Maybe.withDefault "" <| Array.get 0 puzzleRows
-        --
-        -- _ =
-        --     Debug.log "puzzleRows" puzzleRows
-        _ =
-            Debug.log "startingPosition" startingPosition
     in
-    toString infectedIndexes
+    -- toString infectedIndexes
+    "Hello"
 
 
 getPuzzleAnswer2 : String
